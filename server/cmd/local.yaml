@@ -1,0 +1,12 @@
+ListenAddr: 0.0.0.0:9133
+Debug: false
+Redis:
+  Addr: vultr.chajiuqqq.cn:6379
+Mongo:
+  url: mongodb://root:chajiupw@vultr.chajiuqqq.cn:27017/?authMechanism=SCRAM-SHA-1&tls=false
+  db: qiniu
+JWTSecret: test
+oss:
+  ak: kbHkkh2NjA_54eVMqt20PRlbA0SF8DozJF7yPWQR
+  sk: AVWVC4Mg42mNElszK7FO4CAtiY8b8BcZEJykvFec
+  bucket: live-video-1024
