@@ -5,6 +5,6 @@ type Counter struct {
 	Seq int64  `bson:"seq" json:"seq"` // max used number
 }
 
-func (c *Counter) Collection() string {
+func (c Counter) Collection() string {
 	return "counters"
 }

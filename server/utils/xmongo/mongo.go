@@ -18,12 +18,12 @@ var debug bool
 
 // Config used for autoload in shared.Config
 type Config struct {
-	URI string `default:"mongodb://mongo:27017/?connect=direct"`
+	URI string
 	DB  string
 	// seconds, 0 will keep mongo client default
-	ConnectTimeout         int
-	Timeout                int
-	ServerSelectionTimeout int
+	ConnectTimeout         int `json:",default=0"`
+	Timeout                int `json:",default=0"`
+	ServerSelectionTimeout int `json:",default=0"`
 }
 type Client struct {
 	*mongo.Client

@@ -34,8 +34,8 @@ type User struct {
 	Followers     []FollowItem     `bson:"followers" json:"followers"`
 	Likes         []LikeItem       `bson:"likes" json:"likes"` // 喜欢的视频
 	Collections   []CollectionItem `bson:"collections" json:"collections"`
-	CreatedAt     int64            `bson:"created_at" json:"created_at"`
-	UpdatedAt     int64            `bson:"updated_at" json:"updated_at"`
+	CreatedAt     time.Time        `bson:"created_at" json:"created_at"`
+	UpdatedAt     time.Time        `bson:"updated_at" json:"updated_at"`
 }
 
 func (u User) Collection() string {

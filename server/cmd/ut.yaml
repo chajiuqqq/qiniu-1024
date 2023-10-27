@@ -4,7 +4,7 @@ Redis:
   Addr: vultr.chajiuqqq.cn:6379
 Mongo:
   uri: mongodb://root:chajiupw@vultr.chajiuqqq.cn:27017/?authMechanism=SCRAM-SHA-1&tls=false
-  db: qiniu
+  db: ut-qiniu
 JWTSecret: test
 oss:
   ak: kbHkkh2NjA_54eVMqt20PRlbA0SF8DozJF7yPWQR

@@ -11,6 +11,7 @@ type Service struct {
 	Logger *zap.Logger
 	Mongo  *xmongo.Database
 	Rdb    *redis.Client
+	Conf   *types.Config
 }
 
 func NewService(conf *types.Config, logger *zap.Logger) *Service {
@@ -40,5 +41,6 @@ func NewService(conf *types.Config, logger *zap.Logger) *Service {
 		Logger: logger,
 		Rdb:    rdb,
 		Mongo:  db,
+		Conf:   conf,
 	}
 }

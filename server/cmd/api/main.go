@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -33,6 +34,7 @@ func main() {
 
 	logger := xlog.New("")
 	srv := service.NewService(config, logger)
+	h := NewHandler(srv)
 
 	// Echo instance
 	e := echo.New()
@@ -47,7 +49,8 @@ func main() {
 	e.HTTPErrorHandler = xecho.NewErrorHandler(logger)
 	// Disable echo logs, error handler above will log the error
 	e.Logger.SetOutput(io.Discard)
-
+	// validator
+	e.Validator = &xecho.CustomValidator{Validator: validator.New()}
 	// Auto recover
 	e.Use(middleware.Recover())
 	// CORS
@@ -57,7 +60,7 @@ func main() {
 		SigningKey:     []byte(config.JWTSecret),
 		SuccessHandler: xecho.ParseUserJWT,
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
-			return new(shared.JWTUserClaims)
+			return new(shared.JWTCustomClaims)
 		},
 	}))
 	u.GET("/user", func(c echo.Context) error {
@@ -69,6 +72,10 @@ func main() {
 		return c.String(200, "public")
 	})
 	// routes
+
+	//user
+	pub.POST("/register", h.PostRegister)
+	pub.POST("/login", h.PostLogin)
 
 	// Start server
 	go func() {

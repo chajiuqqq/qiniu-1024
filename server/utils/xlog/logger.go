@@ -5,7 +5,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"qiniu-1024-server/types"
 )
 
 var logger *zap.Logger
@@ -16,9 +15,6 @@ func New(env string) *zap.Logger {
 		return logger
 	}
 	switch env {
-	case types.DebugEnv:
-	case types.DevEnv:
-	case types.ProdEnv:
 	default:
 		config := zap.NewDevelopmentConfig()
 		logger, err = config.Build()

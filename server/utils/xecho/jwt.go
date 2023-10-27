@@ -8,12 +8,6 @@ import (
 
 func ParseUserJWT(c echo.Context) {
 	token := c.Get("user").(*jwt.Token)
-	claims := token.Claims.(*shared.JWTUserClaims)
-	c.Set(shared.JWTClaimUid, claims.UserID)
-}
-
-func ParseAdminJWT(c echo.Context) {
-	token := c.Get("user").(*jwt.Token)
-	claims := token.Claims.(*shared.JWTAdminClaims)
+	claims := token.Claims.(*shared.JWTCustomClaims)
 	c.Set(shared.JWTClaimUid, claims.UserID)
 }
