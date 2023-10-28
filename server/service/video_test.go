@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/stretchr/testify/assert"
 	"qiniu-1024-server/model"
-	"qiniu-1024-server/types"
 	"testing"
 )
 
@@ -12,11 +11,8 @@ func TestService_OssVideoCallback(t *testing.T) {
 	assert.NoError(t, err)
 
 	vid := int64(10000001)
-	v, err := srv.SaveVideo(ctx, 1, types.MainVideoSubmit{
-		VideoID:    vid,
-		CategoryID: 1,
-		Desc:       "test...",
-	})
+	// presave
+	v, err := srv.PreSaveVideo(ctx, 1, vid)
 	assert.NoError(t, err)
 	assert.Equal(t, model.VideoStatusUploading, v.Status)
 
@@ -32,11 +28,8 @@ func TestService_VideoCoverStatusUpdate(t *testing.T) {
 	assert.NoError(t, err)
 
 	vid := int64(10000001)
-	v, err := srv.SaveVideo(ctx, 1, types.MainVideoSubmit{
-		VideoID:    vid,
-		CategoryID: 1,
-		Desc:       "test...",
-	})
+	// presave
+	v, err := srv.PreSaveVideo(ctx, 1, vid)
 	assert.NoError(t, err)
 	assert.Equal(t, model.CoverStatusUploading, v.CoverStatus)
 
