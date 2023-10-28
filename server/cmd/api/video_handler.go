@@ -13,6 +13,10 @@ import (
 )
 
 func (h *Handler) UploadFile(c echo.Context) error {
+	uid, err := xecho.CurUserID(c)
+	if err != nil {
+		return err
+	}
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -40,7 +44,8 @@ func (h *Handler) UploadFile(c echo.Context) error {
 		return err
 	}
 
-	var key = fmt.Sprintf("%d.mp4", service.GenVideoID(videoNum))
+	vid := service.GenVideoID(videoNum)
+	var key = fmt.Sprintf("%d.mp4", vid)
 	go func() {
 		_, err = h.srv.Oss.ByteUpload(fileBytes, key)
 		if err != nil {
@@ -54,7 +59,12 @@ func (h *Handler) UploadFile(c echo.Context) error {
 
 	// todo: upload log
 
+	_, err = h.srv.PreSaveVideo(c.Request().Context(), uid, vid)
+	if err != nil {
+		return err
+	}
 	return c.JSON(200, echo.Map{
+		"vid": vid,
 		"key": key,
 		"url": h.srv.Oss.ResourceUrl(key),
 	})

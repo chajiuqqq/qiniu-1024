@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  api:
+    image: chajiuqqq/niuniu-video-api
+    ports:
+      - 9133:9133
+    volumes:
+      - ~/conf:/conf

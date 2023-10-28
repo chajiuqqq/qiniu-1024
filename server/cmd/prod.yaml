@@ -1,0 +1,14 @@
+ListenAddr: 0.0.0.0:9133
+Debug: true
+Redis:
+  Addr: redis:6379
+Mongo:
+  uri: mongodb://root:chajiupw@mongo:27017/?authMechanism=SCRAM-SHA-1&tls=false
+  db: qiniu
+JWTSecret: test
+oss:
+  ak: kbHkkh2NjA_54eVMqt20PRlbA0SF8DozJF7yPWQR
+  sk: AVWVC4Mg42mNElszK7FO4CAtiY8b8BcZEJykvFec
+  bucket: live-video-1024
+  domain: http://cdn.chajiuqqq.cn
+  videoCallback: http://vultr.chajiuqqq.cn:9133/v1/oss/video/callback

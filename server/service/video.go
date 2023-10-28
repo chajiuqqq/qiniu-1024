@@ -53,8 +53,6 @@ func (s *Service) VideoScoreCal(playCnt, likeCnt, collectCnt int64) int64 {
 }
 
 func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoSubmit) (*model.Video, error) {
-	key := fmt.Sprintf("%d.mp4", req.VideoID)
-
 	category, err := s.CategoryDetail(ctx, req.CategoryID)
 	if err != nil {
 		return nil, xerr.New(400, "CategoryNotFound", "category id not exist")
@@ -67,15 +65,38 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 		return nil, xerr.New(400, "VideoExisted", "video existed")
 	}
 
+	var col = s.Mongo.Collection(model.Video{}.Collection())
+	var video = new(model.Video)
+	after := options.After
+	opt := options.FindOneAndUpdateOptions{
+		ReturnDocument: &after,
+	}
+	err = col.FindOneAndUpdate(ctx, bson.M{"id": req.VideoID, "user_id": uid},
+		bson.M{"$set": bson.M{"category_id": req.CategoryID, "category": category.Name, "description": req.Desc}}, &opt).Decode(video)
+	if err != nil {
+		return nil, fmt.Errorf("save video db failed: %w", err)
+	}
+	return video, nil
+}
+
+// PreSaveVideo 用于上传时预保存video
+func (s *Service) PreSaveVideo(ctx context.Context, uid int64, vid int64) (*model.Video, error) {
+	key := fmt.Sprintf("%d.mp4", vid)
+
+	existed, err := s.VideoExisted(ctx, vid)
+	if err != nil {
+		return nil, err
+	}
+	if existed {
+		return nil, xerr.New(400, "VideoExisted", "video existed")
+	}
+
 	video := &model.Video{
-		ID:           req.VideoID,
-		Number:       GetVideoNum(req.VideoID),
+		ID:           vid,
+		Number:       GetVideoNum(vid),
 		UserID:       uid,
-		CategoryID:   category.ID,
-		Category:     category.Name,
 		PlayUrl:      s.Oss.ResourceUrl(key),
 		CoverUrl:     s.Oss.CoverUrl(key),
-		Description:  req.Desc,
 		PlayCount:    0,
 		LikesCount:   0,
 		CollectCount: 0,
@@ -86,7 +107,7 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 	}
 	_, err = s.Mongo.Collection(model.Video{}.Collection()).InsertOne(ctx, video)
 	if err != nil {
-		return nil, fmt.Errorf("save video db failed: %w", err)
+		return nil, fmt.Errorf("pre save video db failed: %w", err)
 	}
 	return video, nil
 }

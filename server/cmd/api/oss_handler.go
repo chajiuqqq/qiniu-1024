@@ -24,6 +24,7 @@ func (h *Handler) OssVideoCallback(c echo.Context) error {
 	}
 	err = h.srv.VideoStatusUpdate(c.Request().Context(), vid)
 	if err != nil {
+		h.sugar.Warnln("VideoStatusUpdate err", "vid", vid, "error", err)
 		return err
 	}
 	return c.NoContent(200)
@@ -47,6 +48,7 @@ func (h *Handler) OssTaskCallback(c echo.Context) error {
 	}
 	err = h.srv.VideoCoverStatusUpdate(c.Request().Context(), vid, coverStatus)
 	if err != nil {
+		h.sugar.Warnln("VideoCoverStatusUpdate err", "vid", vid, "error", err)
 		return err
 	}
 	return c.NoContent(200)
