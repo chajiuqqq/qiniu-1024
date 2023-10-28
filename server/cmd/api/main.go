@@ -76,7 +76,6 @@ func main() {
 
 	// oss
 	u.POST("/upload", h.UploadFile)
-	pub.POST("/oss/video/callback", h.OssVideoCallback)
 	pub.POST("/oss/task/callback", h.OssTaskCallback)
 
 	// user
