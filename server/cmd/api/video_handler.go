@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"io"
@@ -29,6 +30,13 @@ func (h *Handler) UploadFile(c echo.Context) error {
 		return xerr.New(400, "InvalidExtension", "invalid file extension")
 	}
 
+	// read file
+	src, err := file.Open()
+	if err != nil {
+		h.sugar.Warnln("Open file err", "filename", file.Filename, "error", err)
+	}
+	defer src.Close()
+
 	videoNum, err := h.srv.GetVideoSeq(c.Request().Context())
 	if err != nil {
 		return err
@@ -36,25 +44,20 @@ func (h *Handler) UploadFile(c echo.Context) error {
 
 	vid := service.GenVideoID(videoNum)
 	var key = fmt.Sprintf("%d.mp4", vid)
-	go func() {
-		src, err := file.Open()
-		if err != nil {
-			h.sugar.Warnln("Open file err", "filename", file.Filename, "error", err)
-		}
-		defer src.Close()
-		// get bytes from file
-		fileBytes, err := io.ReadAll(src)
-		if err != nil {
-			h.sugar.Warnln("ReadAll file err", "filename", file.Filename, "error", err)
-		}
 
+	// get bytes from file
+	fileBytes, err := io.ReadAll(src)
+	if err != nil {
+		h.sugar.Warnln("ReadAll file err", "filename", file.Filename, "error", err)
+	}
+	go func() {
 		// upload
 		_, err = h.srv.Oss.ByteUpload(fileBytes, key)
 		if err != nil {
 			h.sugar.Warnln("Oss ByteUpload err", "filename", file.Filename, "error", err)
 		}
 		// change status
-		err = h.srv.VideoStatusUpdate(c.Request().Context(), vid, model.VideoStatusNew)
+		err = h.srv.VideoStatusUpdate(context.Background(), vid, model.VideoStatusNew)
 		if err != nil {
 			h.sugar.Warnln("VideoStatusUpdate err", "vid", vid, "error", err)
 		}
