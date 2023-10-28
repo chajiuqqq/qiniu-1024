@@ -2,10 +2,6 @@ package types
 
 import "qiniu-1024-server/model"
 
-type MainVideoQuery struct {
-	CategoryID int64 `json:"category_id"`
-}
-
 type MainVideoSubmit struct {
 	CategoryID int64  `json:"category_id"`
 	VideoID    int64  `json:"video_id"`

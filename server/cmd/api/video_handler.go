@@ -11,6 +11,7 @@ import (
 	"qiniu-1024-server/types"
 	"qiniu-1024-server/utils/xecho"
 	"qiniu-1024-server/utils/xerr"
+	"strconv"
 	"strings"
 )
 
@@ -81,11 +82,12 @@ func (h *Handler) GetMainCategories(c echo.Context) error {
 	return c.JSON(200, data)
 }
 func (h *Handler) GetMainVideos(c echo.Context) error {
-	var req types.MainVideoQuery
-	if err := c.Bind(&req); err != nil {
-		return err
+	param := c.QueryParam("category_id")
+	cid, err := strconv.ParseInt(param, 10, 64)
+	if err != nil {
+		return xerr.New(400, "InvalidParam", "invalid category_id")
 	}
-	data, err := h.srv.MainVideos(c.Request().Context(), req.CategoryID)
+	data, err := h.srv.MainVideos(c.Request().Context(), cid)
 	if err != nil {
 		return err
 	}

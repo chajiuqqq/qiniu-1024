@@ -61,8 +61,8 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 	if err != nil {
 		return nil, err
 	}
-	if existed {
-		return nil, xerr.New(400, "VideoExisted", "video existed")
+	if !existed {
+		return nil, xerr.New(400, "VideoNotExisted", "video not exist")
 	}
 
 	var col = s.Mongo.Collection(model.Video{}.Collection())
@@ -72,7 +72,7 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 		ReturnDocument: &after,
 	}
 	err = col.FindOneAndUpdate(ctx, bson.M{"id": req.VideoID, "user_id": uid},
-		bson.M{"$set": bson.M{"category_id": req.CategoryID, "category": category.Name, "description": req.Desc}}, &opt).Decode(video)
+		bson.M{"$set": bson.M{"category_id": req.CategoryID, "category": category.Name, "description": req.Desc, "status": model.VideoStatusOnShow}}, &opt).Decode(video)
 	if err != nil {
 		return nil, fmt.Errorf("save video db failed: %w", err)
 	}

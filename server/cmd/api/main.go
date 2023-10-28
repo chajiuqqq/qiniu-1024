@@ -3,12 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt/v5"
-	echojwt "github.com/labstack/echo-jwt/v4"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/zeromicro/go-zero/core/conf"
 	"io"
 	"net"
 	"net/http"
@@ -22,6 +16,13 @@ import (
 	"qiniu-1024-server/utils/xmongo"
 	"syscall"
 	"time"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/zeromicro/go-zero/core/conf"
 )
 
 var configPath = flag.String("f", "../local.yaml", "config path")
