@@ -28,8 +28,7 @@ jobs:
           go env
       # 运行测试
       - name: Run tests
-        run: go test ./...
-        working-directory: server  # 设置工作目录为 'server'
+        run: cd server && go test ./...
   api:
     needs: go-test
     runs-on: ubuntu-latest
