@@ -6,7 +6,7 @@ FROM golang:1.21 as builder
 WORKDIR /app
 
 # 将源代码复制到容器中
-COPY ./server/* .
+COPY . .
 
 # 获取依赖并缓存它们
 # 假设您的项目使用go modules来管理依赖
