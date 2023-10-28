@@ -11,4 +11,3 @@ oss:
   sk: AVWVC4Mg42mNElszK7FO4CAtiY8b8BcZEJykvFec
   bucket: live-video-1024
   domain: http://cdn.chajiuqqq.cn
-  videoCallback: http://vultr.chajiuqqq.cn:9133/v1/oss/video/callback

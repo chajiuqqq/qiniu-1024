@@ -15,18 +15,16 @@ import (
 var ossClient *Client
 
 type Client struct {
-	mac           *qbox.Mac
-	bucket        string
-	conf          *storage.Config
-	domain        string
-	videoCallback string
+	mac    *qbox.Mac
+	bucket string
+	conf   *storage.Config
+	domain string
 }
 type Config struct {
-	AK            string
-	SK            string
-	Bucket        string
-	Domain        string
-	VideoCallback string
+	AK     string
+	SK     string
+	Bucket string
+	Domain string
 }
 
 type TaskCallbackBody struct {
@@ -54,11 +52,10 @@ func NewOssClient(conf *Config) *Client {
 	cfg.UseCdnDomains = true
 
 	return &Client{
-		mac:           qbox.NewMac(conf.AK, conf.SK),
-		bucket:        conf.Bucket,
-		conf:          &cfg,
-		domain:        conf.Domain,
-		videoCallback: conf.VideoCallback,
+		mac:    qbox.NewMac(conf.AK, conf.SK),
+		bucket: conf.Bucket,
+		conf:   &cfg,
+		domain: conf.Domain,
 	}
 }
 func (c *Client) FileUpload(localFile string, name string) (string, error) {
@@ -88,9 +85,7 @@ func (c *Client) FileUpload(localFile string, name string) (string, error) {
 func (c *Client) ByteUpload(data []byte, name string) (string, error) {
 	bucket := c.bucket
 	putPolicy := storage.PutPolicy{
-		Scope:        bucket,
-		CallbackURL:  c.videoCallback,
-		CallbackBody: "key=$(key)",
+		Scope: bucket,
 	}
 	upToken := putPolicy.UploadToken(c.mac)
 	// 构建表单上传的对象

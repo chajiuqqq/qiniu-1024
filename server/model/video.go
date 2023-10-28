@@ -3,9 +3,9 @@ package model
 import "time"
 
 const (
-	VideoStatusUploading = "Uploading"
-	VideoStatusNew       = "New"
-	VideoStatusOnShow    = "OnShow"
+	VideoStatusUploading = "Uploading" // 视频上传中
+	VideoStatusNew       = "New"       // 视频已上传，用户提交前
+	VideoStatusOnShow    = "OnShow"    // 用户提交后
 	VideoStatusOffShow   = "OffShow"
 
 	CoverStatusUploading = "Uploading"

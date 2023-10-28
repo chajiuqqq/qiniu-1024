@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"io"
 	"net/http"
+	"qiniu-1024-server/model"
 	"qiniu-1024-server/service"
 	"qiniu-1024-server/types"
 	"qiniu-1024-server/utils/xecho"
@@ -50,6 +51,10 @@ func (h *Handler) UploadFile(c echo.Context) error {
 		_, err = h.srv.Oss.ByteUpload(fileBytes, key)
 		if err != nil {
 			h.sugar.Warnln("Oss ByteUpload err", "filename", file.Filename, "error", err)
+		}
+		err = h.srv.VideoStatusUpdate(c.Request().Context(), vid, model.VideoStatusNew)
+		if err != nil {
+			h.sugar.Warnln("VideoStatusUpdate err", "vid", vid, "error", err)
 		}
 	}()
 

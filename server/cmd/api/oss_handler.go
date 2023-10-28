@@ -8,28 +8,6 @@ import (
 	"qiniu-1024-server/utils/oss"
 )
 
-func (h *Handler) OssVideoCallback(c echo.Context) error {
-	pass, err := h.srv.Oss.VerifyCallback(c.Request())
-	if err != nil {
-		return err
-	}
-	if !pass {
-		return c.NoContent(403)
-	}
-
-	key := c.Param("key")
-	vid, err := service.GetVideoIDFromKey(key)
-	if err != nil {
-		return fmt.Errorf("get video id from key failed: %w", err)
-	}
-	err = h.srv.VideoStatusUpdate(c.Request().Context(), vid)
-	if err != nil {
-		h.sugar.Warnln("VideoStatusUpdate err", "vid", vid, "error", err)
-		return err
-	}
-	return c.NoContent(200)
-}
-
 func (h *Handler) OssTaskCallback(c echo.Context) error {
 	var ossTask oss.TaskCallbackBody
 	if err := c.Bind(&ossTask); err != nil {

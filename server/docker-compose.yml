@@ -7,3 +7,8 @@ services:
       - 9133:9133
     volumes:
       - ~/conf:/conf
+    networks:
+      - root_main-net
+networks:
+  root_main-net:
+    external: true

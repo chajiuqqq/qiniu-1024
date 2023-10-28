@@ -112,10 +112,13 @@ func (s *Service) PreSaveVideo(ctx context.Context, uid int64, vid int64) (*mode
 	return video, nil
 }
 
-func (s *Service) VideoStatusUpdate(ctx context.Context, vid int64) error {
-	// TODO: 之后可以改成new
+func (s *Service) VideoStatusUpdate(ctx context.Context, vid int64, status string) error {
+	update := bson.M{"status": status}
+	if status == model.VideoStatusNew {
+		update["uploaded_at"] = time.Now()
+	}
 	res, err := s.Mongo.Collection(model.Video{}.Collection()).UpdateOne(ctx, bson.M{"id": vid},
-		bson.M{"$set": bson.M{"status": model.VideoStatusOnShow, "uploaded_at": time.Now()}})
+		bson.M{"$set": update})
 	if err != nil {
 		return fmt.Errorf("update video db failed: %w", err)
 	}

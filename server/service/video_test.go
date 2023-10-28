@@ -6,23 +6,21 @@ import (
 	"testing"
 )
 
-func TestService_OssVideoCallback(t *testing.T) {
+func TestService_VideoStatusUpdate(t *testing.T) {
 	err := srv.Mongo.Collection(model.Video{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
-
 	vid := int64(10000001)
 	// presave
 	v, err := srv.PreSaveVideo(ctx, 1, vid)
 	assert.NoError(t, err)
 	assert.Equal(t, model.VideoStatusUploading, v.Status)
 
-	err = srv.VideoStatusUpdate(ctx, vid)
+	err = srv.VideoStatusUpdate(ctx, vid, model.VideoStatusNew)
 	assert.NoError(t, err)
 	v, err = srv.VideoDetail(ctx, vid)
 	assert.NoError(t, err)
-	assert.Equal(t, model.VideoStatusOnShow, v.Status)
+	assert.Equal(t, model.VideoStatusNew, v.Status)
 }
-
 func TestService_VideoCoverStatusUpdate(t *testing.T) {
 	err := srv.Mongo.Collection(model.Video{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
