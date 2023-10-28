@@ -24,3 +24,27 @@ jobs:
           context: ./server
           push: true
           tags: chajiuqqq/niuniu-video-api:latest
+  go-test:
+    # 指定运行此作业的环境，例如，最新版本的Ubuntu。
+    runs-on: ubuntu-latest
+
+    steps:
+      # 此步骤检出仓库的代码到GitHub Actions的运行环境中
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      # 此步骤设置Go环境
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21 # 指定Go的版本，可以根据需要更改
+
+      # 显示Go的版本和环境信息，这是一个可选步骤，有助于调试
+      - name: Go info
+        run: |
+          go version
+          go env
+      # 运行测试
+      - name: Run tests
+        run: go test ./...
+        working-directory: server  # 设置工作目录为 'server'

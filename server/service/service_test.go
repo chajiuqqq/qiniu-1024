@@ -15,7 +15,7 @@ var srv *Service
 var ctx = context.Background()
 
 func TestMain(m *testing.M) {
-	configPath := "../cmd/ut.yaml"
+	configPath := "./cmd/ut.yaml"
 	var config = new(types.Config)
 	conf.MustLoad(configPath, config)
 
