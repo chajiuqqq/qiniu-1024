@@ -28,7 +28,7 @@ jobs:
           go env
       # 运行测试
       - name: Run tests
-        run: go test ./...
+        run: cd server && go test ./...
   api:
     needs: go-test
     runs-on: ubuntu-latest
