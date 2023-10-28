@@ -7,12 +7,14 @@ import (
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"io"
+	"net/http"
 	"os"
+	"strings"
 )
 
-var ossClient *OssClient
+var ossClient *Client
 
-type OssClient struct {
+type Client struct {
 	mac    *qbox.Mac
 	bucket string
 	conf   *storage.Config
@@ -22,10 +24,25 @@ type Config struct {
 	AK     string
 	SK     string
 	Bucket string
-	domain string
+	Domain string
 }
 
-func NewOssClient(conf *Config) *OssClient {
+type TaskCallbackBody struct {
+	Version  string `json:"version"`
+	ID       string `json:"id"`
+	Reqid    string `json:"reqid"`
+	Pipeline string `json:"pipeline"`
+	Input    struct {
+		KodoFile struct {
+			Bucket string `json:"bucket"`
+			Key    string `json:"key"`
+		} `json:"kodo_file"`
+	}
+	Code int    `json:"code"`
+	Desc string `json:"desc"`
+}
+
+func NewOssClient(conf *Config) *Client {
 	cfg := storage.Config{}
 	// 空间对应的机房
 	cfg.Region = &storage.ZoneHuadongZheJiang2
@@ -34,14 +51,14 @@ func NewOssClient(conf *Config) *OssClient {
 	// 上传是否使用CDN上传加速
 	cfg.UseCdnDomains = true
 
-	return &OssClient{
+	return &Client{
 		mac:    qbox.NewMac(conf.AK, conf.SK),
 		bucket: conf.Bucket,
 		conf:   &cfg,
-		domain: conf.domain,
+		domain: conf.Domain,
 	}
 }
-func (c *OssClient) FileUpload(localFile string, name string) (string, error) {
+func (c *Client) FileUpload(localFile string, name string) (string, error) {
 	bucket := c.bucket
 	putPolicy := storage.PutPolicy{
 		Scope: bucket,
@@ -65,10 +82,12 @@ func (c *OssClient) FileUpload(localFile string, name string) (string, error) {
 	return ret.Key, nil
 }
 
-func (c *OssClient) ByteUpload(data []byte, name string) (string, error) {
+func (c *Client) ByteUpload(data []byte, name string) (string, error) {
 	bucket := c.bucket
 	putPolicy := storage.PutPolicy{
-		Scope: bucket,
+		Scope:        bucket,
+		CallbackURL:  "http://vultr.chajiuqqq.cn:9133/v1/oss/callback",
+		CallbackBody: "key=$(key)",
 	}
 	upToken := putPolicy.UploadToken(c.mac)
 	// 构建表单上传的对象
@@ -84,11 +103,15 @@ func (c *OssClient) ByteUpload(data []byte, name string) (string, error) {
 	return ret.Key, nil
 }
 
-func (c *OssClient) ResourceUrl(key string) string {
+func (c *Client) ResourceUrl(key string) string {
 	publicAccessURL := storage.MakePublicURL(c.domain, key)
 	return publicAccessURL
 }
-func (c *OssClient) GetResource(key string) ([]byte, error) {
+func (c *Client) CoverUrl(key string) string {
+	ar := strings.Split(key, ".")
+	return c.ResourceUrl(ar[0] + "_cover.jpg")
+}
+func (c *Client) GetResource(key string) ([]byte, error) {
 	bm := storage.NewBucketManager(c.mac, &storage.Config{})
 
 	// err 和 resp 可能同时有值，当 err 有值时，下载是失败的，此时如果 resp 也有值可以通过 resp 获取响应状态码等其他信息
@@ -106,4 +129,9 @@ func (c *OssClient) GetResource(key string) ([]byte, error) {
 		return nil, fmt.Errorf("download file from oss failed, err:%w", err)
 	}
 	return body, nil
+}
+
+// VerifyCallback 验证上传回调请求是否来自存储服务
+func (c *Client) VerifyCallback(req *http.Request) (bool, error) {
+	return c.mac.VerifyCallback(req)
 }

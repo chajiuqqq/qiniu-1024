@@ -8,7 +8,6 @@ import (
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 	"github.com/zeromicro/go-zero/core/conf"
 	"io"
 	"net"
@@ -33,6 +32,8 @@ func main() {
 	conf.MustLoad(*configPath, config)
 
 	logger := xlog.New("")
+	sugar := logger.Sugar()
+	sugar.Info("API Starting...")
 	srv := service.NewService(config, logger)
 	h := NewHandler(srv)
 
@@ -73,17 +74,27 @@ func main() {
 	})
 	// routes
 
-	//user
-	pub.POST("/register", h.PostRegister)
-	pub.POST("/login", h.PostLogin)
+	// oss
+	u.POST("/upload", h.UploadFile)
+	pub.POST("/oss/video/callback", h.OssVideoCallback)
+	pub.POST("/oss/task/callback", h.OssTaskCallback)
+
+	// user
+	pub.POST("/user/register", h.PostRegister)
+	pub.POST("/user/login", h.PostLogin)
+
+	// main
+	pub.GET("/main/categories", h.GetMainCategories)
+	pub.GET("/main/videos", h.GetMainVideos)
+	u.POST("/main/video", h.PostMainVideo)
 
 	// Start server
 	go func() {
-		log.Infof("API Start at %s", config.ListenAddr)
+		sugar.Infof("API Start at %s", config.ListenAddr)
 		err := e.Start(config.ListenAddr)
 		if err != nil && err != http.ErrServerClosed {
-			log.Errorf("API Force Shutting down: %s", err)
-			log.Fatal("Force shutting down the server")
+			sugar.Errorf("API Force Shutting down: %s", err)
+			sugar.Fatal("Force shutting down the server")
 		}
 	}()
 	// Wait for interrupt signal to gracefully shut down the server with a timeout of 10 seconds.
@@ -91,15 +102,16 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
+	sugar.Infof("API now Shutdown...")
 	// shutdown echo
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	err := e.Shutdown(ctx)
 	if err != nil {
-		log.Errorf("Universal API graceful shutdown failed: %s", err)
-		log.Fatal(err)
+		sugar.Errorf("API graceful shutdown failed: %s", err)
+		sugar.Fatal(err)
 	}
 	// release global mongo connection
 	xmongo.Close(ctx)
-	log.Info("API graceful shutdown")
+	sugar.Info("API graceful shutdown")
 }

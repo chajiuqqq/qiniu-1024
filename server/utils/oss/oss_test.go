@@ -1,11 +1,11 @@
 package oss
 
-func getClient() *OssClient {
+func getClient() *Client {
 	c := NewOssClient(&Config{
 		AK:     "kbHkkh2NjA_54eVMqt20PRlbA0SF8DozJF7yPWQR",
 		SK:     "AVWVC4Mg42mNElszK7FO4CAtiY8b8BcZEJykvFec",
 		Bucket: "live-video-1024",
-		domain: "cdn-host.chajiuqqq.cn",
+		Domain: "cdn-host.chajiuqqq.cn",
 	})
 	return c
 }

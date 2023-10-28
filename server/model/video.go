@@ -2,6 +2,17 @@ package model
 
 import "time"
 
+const (
+	VideoStatusUploading = "Uploading"
+	VideoStatusNew       = "New"
+	VideoStatusOnShow    = "OnShow"
+	VideoStatusOffShow   = "OffShow"
+
+	CoverStatusUploading = "Uploading"
+	CoverStatusSuccess   = "Success"
+	CoverStatusFailed    = "Failed"
+)
+
 type Comment struct {
 	Content    string    `bson:"content" json:"content"`
 	UserID     int64     `bson:"user_id" json:"user_id"`
@@ -23,23 +34,26 @@ func (c CommentLog) Collection() string {
 }
 
 type Video struct {
-	ID           int64     `bson:"id" json:"id"` // CategoryID*1e8 + Number
-	Number       int64     `bson:"number" json:"number"`
-	UserID       int64     `bson:"user_id" json:"user_id"`
-	CategoryID   int64     `bson:"category_id" json:"category_id"`
-	Category     string    `bson:"category" json:"category"`
-	PlayUrl      string    `bson:"play_url" json:"play_url"`
-	CoverUrl     string    `bson:"cover_url" json:"cover_url"`
-	Description  string    `bson:"description" json:"description"`
-	PlayCount    int64     `bson:"play_count" json:"play_count"`
-	LikesCount   int64     `bson:"likes_count" json:"likes_count"`
-	CollectCount int64     `bson:"collect_count" json:"collect_count"`
-	Comments     []Comment `bson:"comments" json:"comments"`
-	Status       string    `bson:"status" json:"status"` // [New新上传, OnShow通过审核,UnderShow需要修改的]
-	IsDeleted    bool      `bson:"is_deleted" json:"is_deleted"`
-	DeletedAt    time.Time `bson:"deleted_at,omitempty" json:"deleted_at,omitempty"`
-	CreatedAt    time.Time `bson:"created_at" json:"created_at"`
-	UpdatedAt    time.Time `bson:"updated_at" json:"updated_at"`
+	ID              int64      `bson:"id" json:"id"` // CategoryID*1e8 + Number
+	Number          int64      `bson:"number" json:"number"`
+	UserID          int64      `bson:"user_id" json:"user_id"`
+	CategoryID      int64      `bson:"category_id" json:"category_id"`
+	Category        string     `bson:"category" json:"category"`
+	PlayUrl         string     `bson:"play_url" json:"play_url"`
+	CoverUrl        string     `bson:"cover_url" json:"cover_url"`
+	Description     string     `bson:"description" json:"description"`
+	PlayCount       int64      `bson:"play_count" json:"play_count"`
+	LikesCount      int64      `bson:"likes_count" json:"likes_count"`
+	CollectCount    int64      `bson:"collect_count" json:"collect_count"`
+	Comments        []Comment  `bson:"comments" json:"comments"`
+	Status          string     `bson:"status" json:"status"`             // [Uploading正在上传,New新上传, OnShow通过审核,UnderShow需要修改的]
+	CoverStatus     string     `bson:"cover_status" json:"cover_status"` // [Uploading正在上传,Success上传成功,Failed上传失败]
+	IsDeleted       bool       `bson:"is_deleted" json:"is_deleted"`
+	UploadedAt      *time.Time `bson:"uploaded_at,omitempty" json:"uploaded_at,omitempty"`
+	CoverUploadedAt *time.Time `bson:"cover_uploaded_at,omitempty" json:"cover_uploaded_at,omitempty"`
+	DeletedAt       *time.Time `bson:"deleted_at,omitempty" json:"deleted_at,omitempty"`
+	CreatedAt       time.Time  `bson:"created_at" json:"created_at"`
+	UpdatedAt       time.Time  `bson:"updated_at" json:"updated_at"`
 }
 
 func (v Video) Collection() string {
@@ -61,6 +75,7 @@ func (v VideoLog) Collection() string {
 type Category struct {
 	ID        int64     `bson:"id" json:"id"`
 	Name      string    `bson:"name" json:"name"`
+	Order     int64     `bson:"order" json:"order"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }

@@ -4,14 +4,17 @@ import (
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"qiniu-1024-server/types"
+	"qiniu-1024-server/utils/oss"
 	"qiniu-1024-server/utils/xmongo"
 )
 
 type Service struct {
 	Logger *zap.Logger
+	Sugar  *zap.SugaredLogger
 	Mongo  *xmongo.Database
 	Rdb    *redis.Client
 	Conf   *types.Config
+	Oss    *oss.Client
 }
 
 func NewService(conf *types.Config, logger *zap.Logger) *Service {
@@ -37,10 +40,19 @@ func NewService(conf *types.Config, logger *zap.Logger) *Service {
 	}
 	logger.Info("connect mongo success")
 
+	// oss
+	ossClient := oss.NewOssClient(&oss.Config{
+		AK:     conf.Oss.AK,
+		SK:     conf.Oss.SK,
+		Bucket: conf.Oss.Bucket,
+		Domain: conf.Oss.Domain,
+	})
 	return &Service{
 		Logger: logger,
+		Sugar:  logger.Sugar(),
 		Rdb:    rdb,
 		Mongo:  db,
 		Conf:   conf,
+		Oss:    ossClient,
 	}
 }

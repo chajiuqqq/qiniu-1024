@@ -12,6 +12,7 @@ import (
 func TestService_UserRegister(t *testing.T) {
 	err := srv.Mongo.Collection(model.User{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
+
 	err = srv.Mongo.Collection(model.Counter{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
 

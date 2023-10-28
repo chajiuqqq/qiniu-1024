@@ -14,6 +14,9 @@ func (s *Service) GetUserSeq(ctx context.Context) (int64, error) {
 func (s *Service) GetVideoSeq(ctx context.Context) (int64, error) {
 	return s.getOneSeq(ctx, model.Video{}.Collection())
 }
+func (s *Service) GetCategorySeq(ctx context.Context) (int64, error) {
+	return s.getOneSeq(ctx, model.Category{}.Collection())
+}
 
 // 返回新的seq
 func (s *Service) getOneSeq(ctx context.Context, name string) (int64, error) {
