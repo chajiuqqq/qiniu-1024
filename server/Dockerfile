@@ -5,14 +5,14 @@ FROM golang:1.21 as builder
 # 设置工作目录
 WORKDIR /app
 
+# 将源代码复制到容器中
+COPY ./server/* .
+
 # 获取依赖并缓存它们
 # 假设您的项目使用go modules来管理依赖
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
-
-# 将源代码复制到容器中
-COPY ./server/* .
 
 # 构建可执行文件
 RUN CGO_ENABLED=0 GOOS=linux go build -o api
