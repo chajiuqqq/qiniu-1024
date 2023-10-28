@@ -15,7 +15,7 @@ COPY go.sum ./
 RUN go mod download
 
 # 构建可执行文件
-RUN CGO_ENABLED=0 GOOS=linux go build -o api
+RUN cd cmd/api && CGO_ENABLED=0 GOOS=linux go build -o /app/api
 
 # 使用scratch作为最小的基础镜像
 FROM scratch
