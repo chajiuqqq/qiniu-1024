@@ -12,7 +12,7 @@ COPY go.sum ./
 RUN go mod download
 
 # 将源代码复制到容器中
-COPY . .
+COPY ./server/* .
 
 # 构建可执行文件
 RUN CGO_ENABLED=0 GOOS=linux go build -o api
