@@ -1,5 +1,8 @@
+import  PlyrComponent from '@/app/ui/video-player/player'
 export default function Page(){
     return (
-        <p>Hello</p>
+        <>
+        <PlyrComponent></PlyrComponent>
+        </>
     )
 }
