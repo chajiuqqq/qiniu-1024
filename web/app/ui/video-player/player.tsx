@@ -1,12 +1,17 @@
+"use client";
 import { useRef } from "react";
 import Plyr, { APITypes } from "plyr-react";
 import "plyr-react/plyr.css";
 
-const videoId = "yWtFb9LJs3o";
-const provider = "youtube";
-const videoOptions = undefined;
-
-const PlyrComponent = () => {
+const videoOptions: Plyr.Options = {
+  autoplay: true,
+  volume: 0.5,
+  loop: { active: true },
+};
+interface PlyrOption {
+  url: string;
+}
+const PlyrComponent: React.FC<PlyrOption> = ({ url }) => {
   const ref = useRef<APITypes>(null);
 
   const enterVideo = () => {
@@ -18,25 +23,23 @@ const PlyrComponent = () => {
     if (plyrInstance) plyrInstance.speed = 2;
   };
 
-  const plyrVideo =
-    videoId && provider ? (
-      <Plyr
-        ref={ref}
-        source={{
-          type: "video",
-          sources: [
-            {
-              src: videoId,
-              provider: provider
-            }
-          ]
-        }}
-        options={videoOptions}
-      />
-    ) : null;
+  const plyrVideo = (
+    <Plyr
+      ref={ref}
+      source={{
+        type: "video",
+        sources: [
+          {
+            src: url,
+          },
+        ],
+      }}
+      options={videoOptions}
+    />
+  );
 
   return (
-    <div>
+    <div className="w-full">
       {plyrVideo}
       <button onClick={enterVideo}>fullscreen</button>
       <button onClick={make2x}>2x</button>
