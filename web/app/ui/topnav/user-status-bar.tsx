@@ -1,6 +1,10 @@
 // components/UserStatusBar.tsx
-import React from 'react';
-import { VideoCameraIcon, HeartIcon, StarIcon } from '@heroicons/react/24/solid'; // 从heroicons中引入图标
+import React from "react";
+import {
+  VideoCameraIcon,
+  HeartIcon,
+  StarIcon,
+} from "@heroicons/react/24/solid"; // 从heroicons中引入图标
 
 export interface UserStatusBarProps {
   // 定义传入的props类型
@@ -10,11 +14,20 @@ export interface UserStatusBarProps {
   followersCount: number; // “我的粉丝”数量
 }
 
-const UserStatusBar: React.FC<UserStatusBarProps> = ({ avatarUrl, worksCount, likesCount, followersCount }) => {
+const UserStatusBar: React.FC<UserStatusBarProps> = ({
+  avatarUrl,
+  worksCount,
+  likesCount,
+  followersCount,
+}) => {
   return (
     <div className="flex items-center space-x-4 p-4">
       {/* 用户头像 */}
-      <img src={avatarUrl} alt="用户头像" className="h-16 w-16 rounded-full object-cover" />
+      <img
+        src={avatarUrl}
+        alt="用户头像"
+        className="h-10 w-10 rounded-full object-cover"
+      />
 
       {/* 用户信息栏 */}
       <div className="flex flex-grow items-center justify-around space-x-4">
