@@ -1,55 +1,170 @@
-import AcmeLogo from "@/app/ui/acme-logo";
-import { lusitana } from "@/app/ui/fonts";
-import Link from "next/link";
-import styles from "./ui/home.module.css";
-import Image from "next/image";
+"use client";
+import PlyrComponent from "@/app/ui/video-player/player";
+import { useState, useEffect } from "react";
 
-export default function Page() {
+type Video = {
+  id: number;
+  play_url: string;
+  description: string;
+};
+const url = "http://47.106.228.5:9133/v1/main/videos?category_id=1";
+let dev = true
+const initalVideos = [
+  {
+    "id": 100000015,
+    "number": 15,
+    "user_id": 100001,
+    "category_id": 1,
+    "category": "旅游",
+    "play_url": "http://cdn.chajiuqqq.cn/100000015.mp4",
+    "cover_url": "http://cdn.chajiuqqq.cn/100000015_cover.jpg",
+    "description": "",
+    "play_count": 0,
+    "likes_count": 0,
+    "collect_count": 0,
+    "comments": null,
+    "status": "OnShow",
+    "cover_status": "Success",
+    "is_deleted": false,
+    "created_at": "2023-10-28T13:23:47.64Z",
+    "updated_at": "2023-10-28T13:23:47.64Z",
+    "score": 0
+  },
+  {
+    "id": 100000016,
+    "number": 16,
+    "user_id": 100001,
+    "category_id": 1,
+    "category": "旅游",
+    "play_url": "http://cdn.chajiuqqq.cn/100000016.mp4",
+    "cover_url": "http://cdn.chajiuqqq.cn/100000016_cover.jpg",
+    "description": "",
+    "play_count": 0,
+    "likes_count": 0,
+    "collect_count": 0,
+    "comments": null,
+    "status": "OnShow",
+    "cover_status": "Success",
+    "is_deleted": false,
+    "uploaded_at": "2023-10-28T13:26:57.467Z",
+    "cover_uploaded_at": "2023-10-28T13:27:11.098Z",
+    "created_at": "2023-10-28T13:26:56.479Z",
+    "updated_at": "2023-10-28T13:27:11.14Z",
+    "score": 0
+  },
+  {
+    "id": 100000017,
+    "number": 17,
+    "user_id": 100001,
+    "category_id": 1,
+    "category": "旅游",
+    "play_url": "http://cdn.chajiuqqq.cn/100000017.mp4",
+    "cover_url": "http://cdn.chajiuqqq.cn/100000017_cover.jpg",
+    "description": "热门爆款推荐",
+    "play_count": 0,
+    "likes_count": 0,
+    "collect_count": 0,
+    "comments": null,
+    "status": "OnShow",
+    "cover_status": "Success",
+    "is_deleted": false,
+    "uploaded_at": "2023-10-28T13:52:36.606Z",
+    "cover_uploaded_at": "2023-10-28T13:52:42.708Z",
+    "created_at": "2023-10-28T13:52:04.148Z",
+    "updated_at": "2023-10-28T14:04:54.512Z",
+    "score": 0
+  }
+]
+const Page = () => {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [index, setIndex] = useState<number>(0);
+  const fetchVideos = async () => {
+    if (dev) {
+      setVideos(initalVideos);
+      setIndex(0);
+    } else {
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            setVideos(data);
+            setIndex(0);
+        });
+    }
+  };
+  const nextVideo = () => {
+    if (index < videos.length - 1) {
+      setIndex((index) => index + 1);
+    } else {
+      fetchVideos();
+    }
+  };
+
+  const lastVideo = () => {
+    if (index > 0) {
+      setIndex((index) => index - 1);
+    }
+  };
+
+
+  useEffect(() => {
+    // 定义一个处理键盘事件的函数
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowUp':
+          console.log('上箭头键被按下了');
+          lastVideo()
+          break;
+        case 'ArrowDown':
+          console.log('下箭头键被按下了');
+          nextVideo()
+          break;
+        default:
+          // 其他按键可以在此处理
+          break;
+      }
+    };
+
+    // 在组件挂载时添加事件监听器
+    window.addEventListener('keydown', handleKeyDown);
+    // 组件卸载时移除滚动事件监听器
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [videos, index]); // 注意这里的空数组，这确保了 useEffect 只在组件挂载时运行
+
+  useEffect(() => {
+    let ignore = false;
+    if (dev) {
+      setVideos(initalVideos);
+      setIndex(0);
+    } else {
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          if (!ignore) {
+            setVideos(data);
+            setIndex(0);
+          }
+        });
+    }
+    return () => {
+      ignore = true
+    };
+
+  },[])
   return (
-    <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-        <AcmeLogo />
-      </div>
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-          {/* <div
-            className="h-0 w-0 border-b-[30px] border-l-[20px] border-r-[20px] border-b-black border-l-transparent border-r-transparent"
-          /> */}
-          <div className={styles.shape}></div>
-          <p
-            className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
-          >
-            <strong>Welcome to Acme.</strong> This is the example for the{" "}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
-            </a>
-            , brought to you by Vercel.
-          </p>
-          <Link
-            href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Log in</span>
-          </Link>
-        </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
-          <Image
-            src="/hero-desktop.png"
-            width={1000}
-            height={760}
-            className="hidden md:block"
-            alt="Screenshots of the dashboard project showing desktop and mobile versions"
-          />
-          <Image
-            src="/hero-mobile.png"
-            width={560}
-            height={620}
-            className="block md:hidden"
-            alt="Screenshots of the dashboard project showing desktop and mobile versions"
-          />
-        </div>
-      </div>
-    </main>
+    <>
+      {videos.length > 0 && index >= 0 && index < videos.length ? (
+        <>
+          <div className="w-full">
+            <PlyrComponent url={videos[index].play_url} desc={videos[index].description} />
+          </div>
+        </>
+      ) : (
+        <p>Loading or invalid index...</p>
+      )}
+    </>
   );
-}
+};
+
+export default Page;
