@@ -16,7 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex border-2 rounded-full pl-5">
+    <div className="flex border-2 rounded-lg pl-5">
       <input
         type="text"
         value={searchTerm}
