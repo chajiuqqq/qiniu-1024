@@ -5,6 +5,7 @@ import {
   ChatBubbleBottomCenterTextIcon,
   ShareIcon,
   PlayIcon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 const LikeIcon = () => {
   return <HeartIcon className="w-6 text-white"></HeartIcon>;
@@ -30,5 +31,9 @@ const MyPlayIcon = () => {
   return <PlayIcon className="w-6 text-white"></PlayIcon>;
 };
 
+const MyCloseIcon = () => {
+  return <XMarkIcon className="w-6 text-white hover:text-blue-700"></XMarkIcon>;
+};
 
-export { LikeIcon, MyLikeIcon, MyCommentIcon, MyCollectionIcon, MyShareIcon,MyPlayIcon };
+
+export { LikeIcon, MyLikeIcon, MyCommentIcon, MyCollectionIcon, MyShareIcon,MyPlayIcon,MyCloseIcon };

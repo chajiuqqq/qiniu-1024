@@ -15,9 +15,10 @@ interface VideoItemProps {
   imgUrl: string;
   type: ProfileTab;
   curVideo: VideoType;
+  onClick:(videoID:number)=>void
 }
 
-const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo,onClick }) => {
   let label;
   switch (type) {
     case ProfileTab.My:
@@ -33,7 +34,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo }) => {
       break;
   }
   return (
-    <div className="relative">
+    <div className="relative cursor-pointer" onClick={()=>{ console.log(curVideo.id,'clicked');onClick(curVideo.id)}}>
       <div className="w-40 h-64  bg-gray-200 rounded-md">
         <img
           src={imgUrl}

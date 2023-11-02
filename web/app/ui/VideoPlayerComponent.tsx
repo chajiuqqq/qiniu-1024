@@ -2,15 +2,16 @@
 import PlyrComponent from "@/app/ui/video-player/player";
 import React,{ useState, useEffect } from "react";
 import { VideoType } from "../lib/video";
-import { initalVideos } from "../lib/data";
 
 interface VideoPlayerProps {
   videos:VideoType[];
   dev?:boolean;
   updateVideos:()=>void
+  startedVideoID?:number
 }
-const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,dev=true}) => {
-  const [index, setIndex] = useState<number>(0);
+const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,dev=true,startedVideoID}) => {
+  const startedIndex = videos.findIndex(video => video.id === startedVideoID);
+  const [index, setIndex] = useState<number>(startedIndex==-1?0:startedIndex);
   const nextVideo = () => {
     if (index < videos.length - 1) {
       setIndex((index) => index + 1);
@@ -50,7 +51,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [videos, index]); // 注意这里的空数组，这确保了 useEffect 只在组件挂载时运行
+  }, []); 
 
   return (
     <>
