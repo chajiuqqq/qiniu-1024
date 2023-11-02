@@ -4,6 +4,7 @@ import {
   StarIcon,
   ChatBubbleBottomCenterTextIcon,
   ShareIcon,
+  PlayIcon,
 } from "@heroicons/react/24/outline";
 const LikeIcon = () => {
   return <HeartIcon className="w-6 text-white"></HeartIcon>;
@@ -25,5 +26,9 @@ const MyCollectionIcon = () => {
 const MyShareIcon = () => {
   return <ShareIcon className="w-6 text-white"></ShareIcon>;
 };
+const MyPlayIcon = () => {
+  return <PlayIcon className="w-6 text-white"></PlayIcon>;
+};
 
-export { LikeIcon, MyLikeIcon, MyCommentIcon, MyCollectionIcon, MyShareIcon };
+
+export { LikeIcon, MyLikeIcon, MyCommentIcon, MyCollectionIcon, MyShareIcon,MyPlayIcon };

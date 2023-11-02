@@ -1,0 +1,1 @@
+export enum ProfileTab {My,Likes,Collection}
