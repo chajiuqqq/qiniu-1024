@@ -2,6 +2,7 @@
 import "@/app/ui/global.css";
 import SideNav from "@/app/ui/dashboard/sidenav";
 import TopNav from "@/app/ui/topnav/topnav";
+import { UserProvider } from "./lib/contexts/UserContext";
 // 搜索处理函数
 const handleSearch = (searchTerm: string) => {
   console.log("执行搜索:", searchTerm);
@@ -19,15 +20,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <UserProvider>
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
           <div className="w-full flex-none md:w-64">
             <SideNav />
           </div>
-          <div className="flex h-screen flex-col w-full m-5 space-y-5 h-full">
+          <div className="flex h-screen flex-col w-full space-y-5 h-full">
             <TopNav onSearch={handleSearch} userStatus={userStatusData} />
             <div className="flex-grow  md:overflow-y-auto">{children}</div>
           </div>
         </div>
+        </UserProvider>
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
 "use client";
 // LoginComponent.tsx
 import React, { useState, FormEvent } from "react";
-
+import { useUser } from "../lib/contexts/UserContext";
 const LoginComponent: React.FC = () => {
+  const { setUser } = useUser();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,6 +20,15 @@ const LoginComponent: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log("Form data submitted:", formData);
+     // 在这里进行登录操作，获取 token 和用户信息
+     const token = 'someToken';
+     const name = 'John Doe';
+ 
+     // 将 token 存储到 cookie 中
+     document.cookie = `token=${token}; path=/`;
+ 
+     // 更新用户状态
+     setUser({name:name,token:token,followCnt:0,followerCnt:0,userLikesCnt:0,desc:'',avatar:'/avatar.jpg'});
   };
 
   return (

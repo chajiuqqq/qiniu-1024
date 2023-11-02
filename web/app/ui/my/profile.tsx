@@ -2,26 +2,28 @@
 import Name from "@/app/ui/my/name";
 import ProfileInfo from "@/app/ui/my/profileInfo";
 import Introduction from "@/app/ui/my/introduction";
+import { useUser } from "@/app/lib/contexts/UserContext";
 
 const Profile = () => {
   const handleEditName = () => { };
   const handleEditIntroduction = () => { };
+  const {user} = useUser()
   return (
     <div className="w-full">
       <div className="flex">
         <img
-          src="/avatar.jpg"
+          src={user.avatar}
           alt="Circular Image"
           className="h-24 w-24 rounded-full object-cover"
         />
         <div className="flex flex-col justify-center space-y-2">
-          <Name name="李四" onEdit={handleEditName}></Name>
-          <ProfileInfo></ProfileInfo>
+          <Name name={user.name} onEdit={handleEditName}></Name>
+          <ProfileInfo {...user}></ProfileInfo>
         </div>
       </div>
       <div>
         <Introduction
-          introduction="我是个活泼开朗的小孩"
+          introduction={user.desc}
           onEdit={handleEditIntroduction}
         ></Introduction>
       </div>

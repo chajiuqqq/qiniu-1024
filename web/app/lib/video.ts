@@ -1,7 +1,7 @@
 export type VideoComment = {
     content: string,
 }
-export type Video = {
+export type VideoType = {
     id: number;
     play_url: string;
     cover_url: string,

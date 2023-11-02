@@ -9,12 +9,12 @@ import {
   MyShareIcon,
   MyPlayIcon
 } from "@/app/ui/icon";
-import { Video } from "@/app/lib/video";
+import { VideoType } from "@/app/lib/video";
 import { ProfileTab } from "@/app/lib/const";
 interface VideoItemProps {
   imgUrl: string;
   type: ProfileTab;
-  curVideo: Video;
+  curVideo: VideoType;
 }
 
 const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo }) => {
