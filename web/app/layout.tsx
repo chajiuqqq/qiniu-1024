@@ -25,9 +25,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="w-full flex-none md:w-64">
             <SideNav />
           </div>
-          <div className="flex h-screen flex-col w-full space-y-5 h-full">
+          <div className="flex h-full flex-col w-full space-y-2 p-5">
             <TopNav onSearch={handleSearch} userStatus={userStatusData} />
-            <div className="flex-grow  md:overflow-y-auto">{children}</div>
+            <div className="flex-grow rounded-md">{children}</div>
           </div>
         </div>
         </UserProvider>

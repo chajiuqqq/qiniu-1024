@@ -11,7 +11,7 @@ interface TopNavProps {
 
 const TopNav: React.FC<TopNavProps> = ({ onSearch, userStatus }) => {
   return (
-    <div className="flex justify-between items-center w-full px-5 ">
+    <div className="flex justify-between items-center w-full">
       {/* 搜索栏组件，放在左边 */}
       <SearchBar onSearch={onSearch} />
 

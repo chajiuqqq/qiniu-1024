@@ -8,7 +8,6 @@ import { ProfileTab } from "../lib/const";
 import Popup from "../ui/Popup";
 import VideoPlayerComponent from "../ui/VideoPlayerComponent";
 import { VideoType } from "../lib/video";
-import { flushSync } from "react-dom";
 const getProfileType = function (index: number): ProfileTab {
   switch (index) {
     case 0:
