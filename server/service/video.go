@@ -182,7 +182,7 @@ func (s *Service) VideoCoverStatusUpdate(ctx context.Context, vid int64, status 
 	return nil
 }
 
-func (s *Service) VideoDetail(ctx context.Context, vid int64) (*model.Video, error) {
+func (s *Service) VideoDetailDB(ctx context.Context, vid int64) (*model.Video, error) {
 	video := new(model.Video)
 	err := s.Mongo.Collection(model.Video{}.Collection()).FindOne(ctx, bson.M{"id": vid}).Decode(video)
 	if err != nil {
@@ -203,7 +203,7 @@ func (s *Service) VideoPrepared(ctx context.Context, vid int64) (bool, error) {
 	if err != nil || !existed {
 		return false, err
 	}
-	v, err := s.VideoDetail(ctx, vid)
+	v, err := s.VideoDetailDB(ctx, vid)
 	if err != nil {
 		return false, err
 	}

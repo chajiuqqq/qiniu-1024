@@ -17,7 +17,7 @@ func TestService_VideoStatusUpdate(t *testing.T) {
 
 	err = srv.VideoStatusUpdate(ctx, vid, model.VideoStatusNew)
 	assert.NoError(t, err)
-	v, err = srv.VideoDetail(ctx, vid)
+	v, err = srv.VideoDetailDB(ctx, vid)
 	assert.NoError(t, err)
 	assert.Equal(t, model.VideoStatusNew, v.Status)
 }
@@ -33,7 +33,7 @@ func TestService_VideoCoverStatusUpdate(t *testing.T) {
 
 	err = srv.VideoCoverStatusUpdate(ctx, vid, model.CoverStatusSuccess)
 	assert.NoError(t, err)
-	v, err = srv.VideoDetail(ctx, vid)
+	v, err = srv.VideoDetailDB(ctx, vid)
 	assert.NoError(t, err)
 	assert.Equal(t, model.CoverStatusSuccess, v.CoverStatus)
 }

@@ -11,9 +11,16 @@ const (
 	CoverStatusUploading = "Uploading"
 	CoverStatusSuccess   = "Success"
 	CoverStatusFailed    = "Failed"
+
+	ActionPlay       = "Play"
+	ActionCollect    = "Collect"
+	ActionUnCollect  = "UnCollect"
+	ActionLike       = "Like"
+	ActionCancelLike = "CancelLike"
 )
 
 type Comment struct {
+	ID         int64     `bson:"id" json:"id"`
 	Content    string    `bson:"content" json:"content"`
 	UserID     int64     `bson:"user_id" json:"user_id"`
 	VideoID    int64     `bson:"video_id" json:"video_id"`
@@ -22,6 +29,11 @@ type Comment struct {
 	UpdatedAt  time.Time `bson:"updated_at" json:"updated_at"`
 	CreatedAt  time.Time `bson:"created_at" json:"created_at"`
 }
+
+func (c Comment) Collection() string {
+	return "comments"
+}
+
 type CommentLog struct {
 	CommentID int64     `bson:"comment_id" json:"comment_id"`
 	Op        string    `bson:"op" json:"op"` // [Like,Delete]
@@ -62,7 +74,7 @@ func (v Video) Collection() string {
 }
 
 type VideoLog struct {
-	Op        string    `bson:"op" json:"op"` // [Like,Collect,Play]
+	Op        string    `bson:"op" json:"op"` // [Like,Collect,Play...]
 	VideoID   int64     `bson:"video_id" json:"video_id"`
 	OwnerID   int64     `bson:"owner_id" json:"owner_id"`
 	UserID    int64     `bson:"user_id" json:"user_id"`

@@ -9,12 +9,13 @@ import (
 )
 
 type Service struct {
-	Logger *zap.Logger
-	Sugar  *zap.SugaredLogger
-	Mongo  *xmongo.Database
-	Rdb    *redis.Client
-	Conf   *types.Config
-	Oss    *oss.Client
+	Logger        *zap.Logger
+	Sugar         *zap.SugaredLogger
+	Mongo         *xmongo.Database
+	Rdb           *redis.Client
+	Conf          *types.Config
+	Oss           *oss.Client
+	ActionService ActionService
 }
 
 func NewService(conf *types.Config, logger *zap.Logger) *Service {
@@ -47,7 +48,7 @@ func NewService(conf *types.Config, logger *zap.Logger) *Service {
 		Bucket: conf.Oss.Bucket,
 		Domain: conf.Oss.Domain,
 	})
-	return &Service{
+	srv := &Service{
 		Logger: logger,
 		Sugar:  logger.Sugar(),
 		Rdb:    rdb,
@@ -55,4 +56,11 @@ func NewService(conf *types.Config, logger *zap.Logger) *Service {
 		Conf:   conf,
 		Oss:    ossClient,
 	}
+	return srv
+}
+func (s *Service) SetActionService(srv ActionService) {
+	if srv == nil {
+		panic("srv is nil")
+	}
+	s.ActionService = srv
 }

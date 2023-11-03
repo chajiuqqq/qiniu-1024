@@ -29,6 +29,8 @@ func TestMain(m *testing.M) {
 
 	logger := xlog.New("")
 	srv = NewService(config, logger)
+	actionSrv := NewDefaultActionService(srv)
+	srv.SetActionService(actionSrv)
 
 	if !strings.HasPrefix(srv.Conf.Mongo.DB, "ut-") {
 		panic("mongo db name must start with ut-")

@@ -78,7 +78,7 @@ func (h *Handler) GetVideo(c echo.Context) error {
 	if err != nil {
 		return xerr.New(400, "InvalidParam", "invalid vid")
 	}
-	data, err := h.srv.VideoDetail(c.Request().Context(), vidNum)
+	data, err := h.srv.VideoDetailDB(c.Request().Context(), vidNum)
 	if err != nil {
 		return err
 	}

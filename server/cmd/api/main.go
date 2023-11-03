@@ -35,7 +35,11 @@ func main() {
 	logger := xlog.New("")
 	sugar := logger.Sugar()
 	sugar.Info("API Starting...")
+
 	srv := service.NewService(config, logger)
+	actionSrv := service.NewDefaultActionService(srv)
+	srv.SetActionService(actionSrv)
+
 	h := NewHandler(srv)
 
 	// Echo instance
@@ -86,20 +90,22 @@ func main() {
 	u.POST("/user/:id/action", h.PostUserAction) // 关注/取消关注/喜欢/取消喜欢某人
 
 	// category
-	pub.GET("/main/categories", h.GetMainCategories)
-	u.POST("/main/categories", h.PostMainCategories)
-	u.PUT("/main/category/:id", h.PutMainCategory)
+	pub.GET("/categories", h.GetMainCategories)
+	u.POST("/categories", h.PostMainCategories)
+	u.PUT("/category/:id", h.PutMainCategory)
 
 	// video
-	pub.GET("/main/videos", h.GetMainVideos)
-	pub.GET("/main/video/:id", h.GetVideo)
-	u.POST("/main/video", h.PostMainVideo)
+	pub.GET("/videos", h.GetMainVideos)
+	pub.GET("/video/:id", h.GetVideo)
+	u.POST("/video", h.PostMainVideo)
 
 	// video action
-	//pub.POST("/play/video/:id", h.PostPlayVideo)
-	//u.POST("/like/video/:id", h.PostLikeVideo)
-	//u.POST("/collect/video/:id", h.PostCollectVideo)
-	//u.POST("/comment/video/:id", h.PostCommentVideo)
+	pub.POST("/action/play/video/:id", h.PostPlayVideo)
+	u.POST("/action/like/video/:id", h.PostLikeVideo)
+	u.POST("/action/collect/video/:id", h.PostCollectVideo)
+	u.DELETE("/action/like/video/:id", h.DeleteLikeVideo)
+	u.DELETE("/action/collect/video/:id", h.DeleteCollectVideo)
+	u.POST("/action/comment/video/:id", h.PostCommentVideo)
 
 	// Start server
 	go func() {
