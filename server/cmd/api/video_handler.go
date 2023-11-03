@@ -81,6 +81,34 @@ func (h *Handler) GetMainCategories(c echo.Context) error {
 	}
 	return c.JSON(200, data)
 }
+func (h *Handler) PostMainCategories(c echo.Context) error {
+	var req []model.Category
+	err := c.Bind(&req)
+	if err != nil {
+		return err
+	}
+	err = h.srv.SaveMainCategories(c.Request().Context(), req)
+	if err != nil {
+		return err
+	}
+	return c.NoContent(200)
+}
+func (h *Handler) PutMainCategory(c echo.Context) error {
+	var req model.Category
+	id := c.Param("id")
+	idNum, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return xerr.New(400, "InvalidCategoryId", "id should be number")
+	}
+	if err := c.Bind(&req); err != nil {
+		return err
+	}
+	d, err := h.srv.UpdateMainCategory(c.Request().Context(), idNum, req)
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, d)
+}
 func (h *Handler) GetMainVideos(c echo.Context) error {
 	param := c.QueryParam("category_id")
 	cid, err := strconv.ParseInt(param, 10, 64)

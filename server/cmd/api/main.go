@@ -83,8 +83,12 @@ func main() {
 	pub.POST("/user/register", h.PostRegister)
 	pub.POST("/user/login", h.PostLogin)
 
-	// main
+	// category
 	pub.GET("/main/categories", h.GetMainCategories)
+	u.POST("/main/categories", h.PostMainCategories)
+	u.PUT("/main/category/:id", h.PutMainCategory)
+
+	// video
 	pub.GET("/main/videos", h.GetMainVideos)
 	u.POST("/main/video", h.PostMainVideo)
 

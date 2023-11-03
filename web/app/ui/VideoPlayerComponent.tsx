@@ -2,6 +2,7 @@
 import PlyrComponent from "@/app/ui/video-player/player";
 import React,{ useState, useEffect } from "react";
 import { VideoType } from "../lib/video";
+import Loading from "./loading";
 
 interface VideoPlayerProps {
   videos:VideoType[];
@@ -65,7 +66,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
           </div>
         </>
       ) : (
-        <p>Loading or invalid index...</p>
+        <Loading></Loading> 
       )}
     </>
   );

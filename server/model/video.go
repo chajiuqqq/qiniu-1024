@@ -76,6 +76,7 @@ type Category struct {
 	ID        int64     `bson:"id" json:"id"`
 	Name      string    `bson:"name" json:"name"`
 	Order     int64     `bson:"order" json:"order"`
+	OnShow    bool      `bson:"on_show" json:"on_show"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
