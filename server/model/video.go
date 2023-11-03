@@ -51,6 +51,7 @@ type Video struct {
 	IsDeleted       bool       `bson:"is_deleted" json:"is_deleted"`
 	UploadedAt      *time.Time `bson:"uploaded_at,omitempty" json:"uploaded_at,omitempty"`
 	CoverUploadedAt *time.Time `bson:"cover_uploaded_at,omitempty" json:"cover_uploaded_at,omitempty"`
+	SubmittedAt     *time.Time `bson:"submitted_at,omitempty" json:"submitted_at,omitempty"`
 	DeletedAt       *time.Time `bson:"deleted_at,omitempty" json:"deleted_at,omitempty"`
 	CreatedAt       time.Time  `bson:"created_at" json:"created_at"`
 	UpdatedAt       time.Time  `bson:"updated_at" json:"updated_at"`

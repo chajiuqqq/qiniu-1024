@@ -82,6 +82,8 @@ func main() {
 	// user
 	pub.POST("/user/register", h.PostRegister)
 	pub.POST("/user/login", h.PostLogin)
+	pub.GET("/user/:id", h.GetUser)              //带上作品
+	u.POST("/user/:id/action", h.PostUserAction) // 关注/取消关注/喜欢/取消喜欢某人
 
 	// category
 	pub.GET("/main/categories", h.GetMainCategories)
@@ -90,7 +92,14 @@ func main() {
 
 	// video
 	pub.GET("/main/videos", h.GetMainVideos)
+	pub.GET("/main/video/:id", h.GetVideo)
 	u.POST("/main/video", h.PostMainVideo)
+
+	// video action
+	//pub.POST("/play/video/:id", h.PostPlayVideo)
+	//u.POST("/like/video/:id", h.PostLikeVideo)
+	//u.POST("/collect/video/:id", h.PostCollectVideo)
+	//u.POST("/comment/video/:id", h.PostCommentVideo)
 
 	// Start server
 	go func() {

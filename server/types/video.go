@@ -13,7 +13,17 @@ type MainVideoUploadResponse struct {
 	Url     string `json:"url"`
 }
 
+type VideoQuery struct {
+	CategoryID int64 `json:"category_id"`
+	UserID     int64 `json:"user_id"`
+}
+
 type MainVideoItem struct {
 	model.Video
-	Score int64 `json:"score"`
+	UserID       int64  `json:"user_id"`
+	Nickname     string `json:"nickname"`
+	AvatarUrl    string `json:"avatar_url"`
+	FollowerCnt  int    `json:"follower_cnt"`
+	PublishedCnt int    `json:"published_cnt"`
+	Score        int64  `json:"score"`
 }

@@ -70,9 +70,19 @@ func (h *Handler) UploadFile(c echo.Context) error {
 	}
 	return c.JSON(200, echo.Map{
 		"vid": vid,
-		"key": key,
-		"url": h.srv.Oss.ResourceUrl(key),
 	})
+}
+func (h *Handler) GetVideo(c echo.Context) error {
+	vid := c.Param("id")
+	vidNum, err := strconv.ParseInt(vid, 10, 64)
+	if err != nil {
+		return xerr.New(400, "InvalidParam", "invalid vid")
+	}
+	data, err := h.srv.VideoDetail(c.Request().Context(), vidNum)
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, data)
 }
 func (h *Handler) GetMainCategories(c echo.Context) error {
 	data, err := h.srv.MainCategories(c.Request().Context())
@@ -110,12 +120,19 @@ func (h *Handler) PutMainCategory(c echo.Context) error {
 	return c.JSON(200, d)
 }
 func (h *Handler) GetMainVideos(c echo.Context) error {
-	param := c.QueryParam("category_id")
-	cid, err := strconv.ParseInt(param, 10, 64)
+	categoryID := c.QueryParam("category_id")
+	cid, err := strconv.ParseInt(categoryID, 10, 64)
+
+	userID := c.QueryParam("user_id")
+	uid, err := strconv.ParseInt(userID, 10, 64)
+
 	if err != nil {
 		return xerr.New(400, "InvalidParam", "invalid category_id")
 	}
-	data, err := h.srv.MainVideos(c.Request().Context(), cid)
+	data, err := h.srv.MainVideos(c.Request().Context(), types.VideoQuery{
+		CategoryID: cid,
+		UserID:     uid,
+	})
 	if err != nil {
 		return err
 	}

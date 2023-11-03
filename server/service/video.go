@@ -14,18 +14,23 @@ import (
 	"time"
 )
 
-func (s *Service) MainVideos(ctx context.Context, categoryID int64) ([]types.MainVideoItem, error) {
+func (s *Service) MainVideosDB(ctx context.Context, q types.VideoQuery) ([]model.Video, error) {
 	var col = s.Mongo.Collection(model.Video{}.Collection())
-	_, err := s.CategoryDetail(ctx, categoryID)
-	if err != nil {
-		return nil, xerr.New(400, "CategoryNotFound", "category id not exist")
+
+	// filter
+	filter := bson.M{"status": model.VideoStatusOnShow}
+	if q.UserID != 0 {
+		filter["user_id"] = q.UserID
+	}
+	if q.CategoryID != 0 {
+		filter["category_id"] = q.CategoryID
 	}
 
 	var data []model.Video
 	opts := &options.FindOptions{
-		Sort: bson.D{{"created_at", 1}},
+		Sort: bson.D{{"created_at", -1}},
 	}
-	cur, err := col.Find(ctx, bson.M{"category_id": categoryID, "status": model.VideoStatusOnShow}, opts)
+	cur, err := col.Find(ctx, filter, opts)
 	if err != nil {
 		return nil, fmt.Errorf("get main videos db failed: %w", err)
 	}
@@ -33,12 +38,45 @@ func (s *Service) MainVideos(ctx context.Context, categoryID int64) ([]types.Mai
 	if err != nil {
 		return nil, fmt.Errorf("get main videos db cursor failed: %w", err)
 	}
+	return data, nil
+}
 
+func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery) ([]types.MainVideoItem, error) {
+	data, err := s.MainVideosDB(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	// find all users
+	var userIds []int64
+	for _, v := range data {
+		userIds = append(userIds, v.UserID)
+	}
+
+	usersMap, err := s.UsersMap(ctx, userIds)
+	if err != nil {
+		return nil, err
+	}
+
+	// compose
 	var res = make([]types.MainVideoItem, len(data))
 	for i := 0; i < len(data); i++ {
+		v := data[i]
+		u, ok := usersMap[data[i].UserID]
+		if !ok {
+			return nil, fmt.Errorf("get user [%d] of video [%d] failed, user not existed", v.UserID, v.ID)
+		}
+		publishedCnt, err := s.UserPublishedCnt(ctx, u.ID)
+		if err != nil {
+			return nil, err
+		}
 		res[i] = types.MainVideoItem{
-			Video: data[i],
-			Score: s.VideoScoreCal(data[i].PlayCount, data[i].LikesCount, data[i].CollectCount),
+			Video:        v,
+			UserID:       u.ID,
+			Nickname:     u.Name,
+			AvatarUrl:    u.AvatarUrl,
+			FollowerCnt:  len(u.Followers),
+			PublishedCnt: publishedCnt,
+			Score:        s.VideoScoreCal(v.PlayCount, v.LikesCount, v.CollectCount),
 		}
 	}
 	slices.SortFunc(res, func(a, b types.MainVideoItem) int {
@@ -57,12 +95,12 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 	if err != nil {
 		return nil, xerr.New(400, "CategoryNotFound", "category id not exist")
 	}
-	existed, err := s.VideoExisted(ctx, req.VideoID)
+	prepared, err := s.VideoPrepared(ctx, req.VideoID)
 	if err != nil {
 		return nil, err
 	}
-	if !existed {
-		return nil, xerr.New(400, "VideoNotExisted", "video not exist")
+	if !prepared {
+		return nil, xerr.New(400, "VideoNotPrepared", "video is not prepared")
 	}
 
 	var col = s.Mongo.Collection(model.Video{}.Collection())
@@ -72,7 +110,12 @@ func (s *Service) SaveVideo(ctx context.Context, uid int64, req types.MainVideoS
 		ReturnDocument: &after,
 	}
 	err = col.FindOneAndUpdate(ctx, bson.M{"id": req.VideoID, "user_id": uid},
-		bson.M{"$set": bson.M{"category_id": req.CategoryID, "category": category.Name, "description": req.Desc, "status": model.VideoStatusOnShow}}, &opt).Decode(video)
+		bson.M{"$set": bson.M{"category_id": req.CategoryID,
+			"category":     category.Name,
+			"description":  req.Desc,
+			"status":       model.VideoStatusOnShow,
+			"submitted_at": time.Now(),
+		}}, &opt).Decode(video)
 	if err != nil {
 		return nil, fmt.Errorf("save video db failed: %w", err)
 	}
@@ -153,6 +196,18 @@ func (s *Service) VideoExisted(ctx context.Context, vid int64) (bool, error) {
 		return false, fmt.Errorf("get video db failed: %w", err)
 	}
 	return cnt != 0, nil
+}
+
+func (s *Service) VideoPrepared(ctx context.Context, vid int64) (bool, error) {
+	existed, err := s.VideoExisted(ctx, vid)
+	if err != nil || !existed {
+		return false, err
+	}
+	v, err := s.VideoDetail(ctx, vid)
+	if err != nil {
+		return false, err
+	}
+	return v.Status == model.VideoStatusNew && v.CoverStatus == model.CoverStatusSuccess, nil
 }
 
 func GenVideoID(seq int64) int64 {
