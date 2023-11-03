@@ -45,16 +45,24 @@ func TestService_UserLogin(t *testing.T) {
 	assert.NoError(t, err)
 
 	u, err := srv.UserRegister(ctx, types.UserRegisterPayload{
+		Username:    "testname",
+		Password:    "test",
+		Description: "Love",
+		Phone:       "1777777777777",
+		AvatarUrl:   "https://test.com/",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, "testname", u.Username)
+
+	token, u, err := srv.UserLogin(ctx, types.UserLoginPayload{
 		Username: "testname",
 		Password: "test",
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, "testname", u.Username)
+	assert.Equal(t, "Love", u.Description)
+	assert.Equal(t, "1777777777777", u.Phone)
+	assert.Equal(t, "https://test.com/", u.AvatarUrl)
 
-	token, err := srv.UserLogin(ctx, types.UserLoginPayload{
-		Username: "testname",
-		Password: "test",
-	})
-	assert.NoError(t, err)
 	fmt.Println(token)
 }

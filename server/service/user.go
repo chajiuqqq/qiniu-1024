@@ -30,9 +30,9 @@ func (s *Service) UserRegister(ctx context.Context, payload types.UserRegisterPa
 		ID:            genUserID(seq),
 		Username:      payload.Username,
 		Password:      payload.Password,
-		Phone:         "",
-		AvatarUrl:     "",
-		Description:   "",
+		Phone:         payload.Phone,
+		AvatarUrl:     payload.AvatarUrl,
+		Description:   payload.Description,
 		GithubAccount: "",
 		WechatAccount: "",
 		UserLikes:     nil,
@@ -53,14 +53,14 @@ func (s *Service) UserRegister(ctx context.Context, payload types.UserRegisterPa
 	returnUser.Password = ""
 	return &returnUser, nil
 }
-func (s *Service) UserLogin(ctx context.Context, payload types.UserLoginPayload) (string, error) {
+func (s *Service) UserLogin(ctx context.Context, payload types.UserLoginPayload) (string, *model.User, error) {
 	var user = new(model.User)
 	err := s.Mongo.Collection(model.User{}.Collection()).FindOne(ctx, bson.M{"username": payload.Username}).Decode(user)
 	if err != nil {
-		return "", fmt.Errorf("login user db failed: %w", err)
+		return "", nil, fmt.Errorf("login user db failed: %w", err)
 	}
 	if user.Password != payload.Password {
-		return "", fmt.Errorf("password is wrong")
+		return "", nil, fmt.Errorf("password is wrong")
 	}
 
 	claims := &shared.JWTCustomClaims{
@@ -77,9 +77,10 @@ func (s *Service) UserLogin(ctx context.Context, payload types.UserLoginPayload)
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(s.Conf.JWTSecret))
 	if err != nil {
-		return "", fmt.Errorf("sign user jwt failed: %w", err)
+		return "", nil, fmt.Errorf("sign user jwt failed: %w", err)
 	}
-	return t, nil
+	user.Password = ""
+	return t, user, nil
 }
 
 func genUserID(seq int64) int64 {

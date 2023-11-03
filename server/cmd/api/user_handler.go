@@ -29,9 +29,9 @@ func (h *Handler) PostLogin(c echo.Context) error {
 	if err := c.Validate(&req); err != nil {
 		return err
 	}
-	token, err := h.srv.UserLogin(c.Request().Context(), req)
+	token, u, err := h.srv.UserLogin(c.Request().Context(), req)
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, echo.Map{"token": token})
+	return c.JSON(http.StatusOK, echo.Map{"token": token, "user": u})
 }
