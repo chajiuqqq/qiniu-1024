@@ -14,8 +14,8 @@ type MainVideoUploadResponse struct {
 }
 
 type VideoQuery struct {
-	CategoryID int64 `json:"category_id"`
-	UserID     int64 `json:"user_id"`
+	CategoryID int64 `query:"category_id"`
+	UserID     int64 `query:"user_id"`
 }
 
 type MainVideoItem struct {

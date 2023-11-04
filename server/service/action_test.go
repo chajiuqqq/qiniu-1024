@@ -42,3 +42,74 @@ func TestDefaultActionService_PlayVideo(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, int64(1), v.PlayCount)
 }
+func TestDefaultActionService_LikeVideo(t *testing.T) {
+	actionInit(ctx, t)
+	// like 1,2
+	err := srv.ActionService.LikeVideo(ctx, 100001, 1)
+	assert.NoError(t, err)
+	err = srv.ActionService.LikeVideo(ctx, 100001, 2)
+	assert.NoError(t, err)
+	v, err := srv.VideoDetailDB(ctx, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(1), v.LikesCount)
+	v, err = srv.VideoDetailDB(ctx, 2)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(1), v.LikesCount)
+
+	u, err := srv.UserDetailDB(ctx, 100001)
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(u.Likes))
+
+	// unlike 1
+	err = srv.ActionService.UnLikeVideo(ctx, 100001, 1)
+	assert.NoError(t, err)
+	v, err = srv.VideoDetailDB(ctx, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(0), v.LikesCount)
+
+	u, err = srv.UserDetailDB(ctx, 100001)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(u.Likes))
+	assert.Equal(t, int64(2), u.Likes[0].VideoID)
+
+}
+func TestDefaultActionService_CollectVideo(t *testing.T) {
+	actionInit(ctx, t)
+	// collect 1,2
+	err := srv.ActionService.CollectVideo(ctx, 100001, 1)
+	assert.NoError(t, err)
+	err = srv.ActionService.CollectVideo(ctx, 100001, 2)
+	assert.NoError(t, err)
+	v, err := srv.VideoDetailDB(ctx, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(1), v.CollectCount)
+	v, err = srv.VideoDetailDB(ctx, 2)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(1), v.CollectCount)
+
+	u, err := srv.UserDetailDB(ctx, 100001)
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(u.Collections))
+
+	// uncollect 1
+	err = srv.ActionService.UnCollectVideo(ctx, 100001, 1)
+	assert.NoError(t, err)
+	v, err = srv.VideoDetailDB(ctx, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, int64(0), v.CollectCount)
+
+	u, err = srv.UserDetailDB(ctx, 100001)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(u.Collections))
+	assert.Equal(t, int64(2), u.Collections[0].VideoID)
+}
+func TestDefaultActionService_CommentVideo(t *testing.T) {
+	actionInit(ctx, t)
+	// collect 1,2
+	err := srv.ActionService.CommentVideo(ctx, 100001, 1, "test comment")
+	assert.NoError(t, err)
+	v, err := srv.VideoDetailDB(ctx, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(v.Comments))
+	assert.Equal(t, "test comment", v.Comments[0].Content)
+}

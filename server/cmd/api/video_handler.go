@@ -120,19 +120,11 @@ func (h *Handler) PutMainCategory(c echo.Context) error {
 	return c.JSON(200, d)
 }
 func (h *Handler) GetMainVideos(c echo.Context) error {
-	categoryID := c.QueryParam("category_id")
-	cid, err := strconv.ParseInt(categoryID, 10, 64)
-
-	userID := c.QueryParam("user_id")
-	uid, err := strconv.ParseInt(userID, 10, 64)
-
-	if err != nil {
-		return xerr.New(400, "InvalidParam", "invalid category_id")
+	var q types.VideoQuery
+	if err := c.Bind(&q); err != nil {
+		return err
 	}
-	data, err := h.srv.MainVideos(c.Request().Context(), types.VideoQuery{
-		CategoryID: cid,
-		UserID:     uid,
-	})
+	data, err := h.srv.MainVideos(c.Request().Context(), q)
 	if err != nil {
 		return err
 	}

@@ -72,3 +72,15 @@ func (h *Handler) PostUserAction(c echo.Context) error {
 	}
 	return c.JSON(200, u)
 }
+
+func (h *Handler) GetCurUser(c echo.Context) error {
+	uid, err := xecho.CurUserID(c)
+	if err != nil {
+		return err
+	}
+	u, err := h.srv.UserDetail(c.Request().Context(), uid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, u)
+}

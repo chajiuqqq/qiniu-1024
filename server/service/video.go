@@ -143,7 +143,7 @@ func (s *Service) PreSaveVideo(ctx context.Context, uid int64, vid int64) (*mode
 		PlayCount:    0,
 		LikesCount:   0,
 		CollectCount: 0,
-		Comments:     nil,
+		Comments:     make([]model.Comment, 0),
 		Status:       model.VideoStatusUploading,
 		CoverStatus:  model.CoverStatusUploading,
 		IsDeleted:    false,
