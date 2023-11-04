@@ -6,6 +6,8 @@ import (
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/bson"
 	"qiniu-1024-server/model"
+	"qiniu-1024-server/types"
+	"qiniu-1024-server/utils"
 	"qiniu-1024-server/utils/xerr"
 	"qiniu-1024-server/utils/xmongo"
 	"time"
@@ -19,6 +21,7 @@ type ActionService interface {
 	LikeVideo(ctx context.Context, uid, vid int64) (*model.Video, error)
 	UnLikeVideo(ctx context.Context, uid, vid int64) (*model.Video, error)
 	CommentVideo(ctx context.Context, uid, vid int64, content string) (*model.Video, error)
+	QueryAction(ctx context.Context, uid int64, videos []types.MainVideoItem) ([]types.MainVideoItem, error)
 }
 type DefaultActionService struct {
 	ActionService
@@ -237,6 +240,25 @@ func (s DefaultActionService) CommentVideo(ctx context.Context, uid, vid int64, 
 		return nil, err
 	}
 	return v, nil
+}
+
+func (s DefaultActionService) QueryAction(ctx context.Context, uid int64, videos []types.MainVideoItem) ([]types.MainVideoItem, error) {
+	u, err := s.parent.UserDetailDB(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+	likesMap := utils.ToMap(u.Likes)
+	collectionMap := utils.ToMap(u.Collections)
+	for i := 0; i < len(videos); i++ {
+		v := &videos[i]
+		if _, ok := likesMap[v.ID]; ok {
+			v.Liked = true
+		}
+		if _, ok := collectionMap[v.ID]; ok {
+			v.Collected = true
+		}
+	}
+	return videos, nil
 }
 
 type RedisActionService struct {

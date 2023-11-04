@@ -118,6 +118,30 @@ func (s *Service) UserPublishedCnt(ctx context.Context, uid int64) (int, error) 
 	}
 	return int(cnt), nil
 }
+func (s *Service) UserPublishedCntMap(ctx context.Context, ids []int64) (map[int64]int, error) {
+	col := s.Mongo.Collection(model.Video{}.Collection())
+	pipeline := mongo.Pipeline{
+		bson.D{{"$match", bson.D{{"user_id", bson.M{"$in": ids}}}}},
+		bson.D{{"$group", bson.D{{"_id", "$user_id"}, {"count", bson.D{{"$sum", 1}}}}}},
+	}
+	var cnts = []struct {
+		ID  int64 `bson:"_id"`
+		Cnt int   `bson:"count"`
+	}{}
+	cur, err := col.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, err
+	}
+	err = cur.All(ctx, &cnts)
+	if err != nil {
+		return nil, err
+	}
+	cntMap := make(map[int64]int)
+	for _, cnt := range cnts {
+		cntMap[cnt.ID] = cnt.Cnt
+	}
+	return cntMap, nil
+}
 func (s *Service) UserDetailDB(ctx context.Context, uid int64) (*model.User, error) {
 	col := s.Mongo.Collection(model.User{}.Collection())
 	var user model.User

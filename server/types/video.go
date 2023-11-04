@@ -14,8 +14,8 @@ type MainVideoUploadResponse struct {
 }
 
 type VideoQuery struct {
-	CategoryID int64 `query:"category_id"`
-	UserID     int64 `query:"user_id"`
+	CategoryID int64 `query:"category_id"` // 只显示该分类的视频
+	UserID     int64 `query:"user_id"`     // 只显示该用户的视频
 }
 
 type MainVideoItem struct {
@@ -25,5 +25,7 @@ type MainVideoItem struct {
 	AvatarUrl    string `json:"avatar_url"`
 	FollowerCnt  int    `json:"follower_cnt"`
 	PublishedCnt int    `json:"published_cnt"`
+	Liked        bool   `json:"liked"`
+	Collected    bool   `json:"collected"`
 	Score        int64  `json:"score"`
 }

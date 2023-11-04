@@ -96,7 +96,7 @@ func main() {
 	u.PUT("/category/:id", h.PutMainCategory)
 
 	// video
-	pub.GET("/videos", h.GetMainVideos)
+	u.GET("/videos", h.GetMainVideos)
 	pub.GET("/video/:id", h.GetVideo)
 	u.POST("/video", h.PostMainVideo)
 

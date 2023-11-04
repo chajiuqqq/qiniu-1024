@@ -41,7 +41,7 @@ func (s *Service) MainVideosDB(ctx context.Context, q types.VideoQuery) ([]model
 	return data, nil
 }
 
-func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery) ([]types.MainVideoItem, error) {
+func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery, curUserID int64) ([]types.MainVideoItem, error) {
 	data, err := s.MainVideosDB(ctx, q)
 	if err != nil {
 		return nil, err
@@ -56,6 +56,10 @@ func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery) ([]types.M
 	if err != nil {
 		return nil, err
 	}
+	publishCntMap, err := s.UserPublishedCntMap(ctx, userIds)
+	if err != nil {
+		return nil, err
+	}
 
 	// compose
 	var res = make([]types.MainVideoItem, len(data))
@@ -65,18 +69,20 @@ func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery) ([]types.M
 		if !ok {
 			return nil, fmt.Errorf("get user [%d] of video [%d] failed, user not existed", v.UserID, v.ID)
 		}
-		publishedCnt, err := s.UserPublishedCnt(ctx, u.ID)
-		if err != nil {
-			return nil, err
-		}
 		res[i] = types.MainVideoItem{
 			Video:        v,
 			UserID:       u.ID,
 			Nickname:     u.Name,
 			AvatarUrl:    u.AvatarUrl,
 			FollowerCnt:  len(u.Followers),
-			PublishedCnt: publishedCnt,
+			PublishedCnt: publishCntMap[u.ID],
 			Score:        s.VideoScoreCal(v.PlayCount, v.LikesCount, v.CollectCount),
+		}
+	}
+	if curUserID != 0 {
+		_, err = s.ActionService.QueryAction(ctx, curUserID, res)
+		if err != nil {
+			return nil, err
 		}
 	}
 	slices.SortFunc(res, func(a, b types.MainVideoItem) int {

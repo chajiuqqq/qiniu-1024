@@ -6,17 +6,36 @@ type UserLikeItem struct {
 	UserID    int64     `bson:"user_id" json:"user_id"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 }
+
+func (u UserLikeItem) Key() any {
+	return u.UserID
+}
+
 type FollowItem struct {
 	UserID    int64     `bson:"user_id" json:"user_id"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 }
+
+func (u FollowItem) Key() any {
+	return u.UserID
+}
+
 type LikeItem struct {
 	VideoID   int64     `bson:"video_id" json:"video_id"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
 }
+
+func (u LikeItem) Key() any {
+	return u.VideoID
+}
+
 type CollectionItem struct {
 	VideoID   int64     `bson:"video_id" json:"video_id"`
 	CreatedAt time.Time `bson:"created_at" json:"created_at"`
+}
+
+func (u CollectionItem) Key() any {
+	return u.VideoID
 }
 
 type User struct {

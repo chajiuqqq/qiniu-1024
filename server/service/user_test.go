@@ -1,7 +1,6 @@
 package service
 
 import (
-	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"qiniu-1024-server/model"
@@ -15,7 +14,7 @@ const (
 	testUsername2 = "testname2"
 )
 
-func initialUser(ctx context.Context, t *testing.T) {
+func initialUser(t *testing.T) {
 	err := srv.Mongo.Collection(model.User{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
 	err = srv.Mongo.Collection(model.Counter{}.Collection()).Drop(ctx)
@@ -101,7 +100,7 @@ func TestService_UserLogin(t *testing.T) {
 }
 
 func TestService_UsersMap(t *testing.T) {
-	initialUser(ctx, t)
+	initialUser(t)
 	mp, err := srv.UsersMap(ctx, []int64{100001, 100002})
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(mp))
@@ -111,7 +110,7 @@ func TestService_UsersMap(t *testing.T) {
 	assert.Equal(t, testUsername2, mp[100002].Username)
 }
 func TestService_PostUserAction(t *testing.T) {
-	initialUser(ctx, t)
+	initialUser(t)
 	// follow
 	from, err := srv.PostUserAction(ctx, 100001, 100002, types.UserActionFollow)
 	assert.NoError(t, err)
@@ -148,4 +147,12 @@ func TestService_PostUserAction(t *testing.T) {
 	to, err = srv.UserDetailDB(ctx, 100002)
 	assert.NoError(t, err)
 	assert.Equal(t, 0, len(to.UserLikes))
+}
+func TestService_UserPublishedCntMap(t *testing.T) {
+	initialUser(t)
+	initVideos(t)
+	mp, err := srv.UserPublishedCntMap(ctx, []int64{100001, 100002})
+	assert.NoError(t, err)
+	assert.Equal(t, 2, mp[100001])
+	assert.Equal(t, 0, mp[100002])
 }

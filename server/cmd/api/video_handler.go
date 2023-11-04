@@ -124,7 +124,8 @@ func (h *Handler) GetMainVideos(c echo.Context) error {
 	if err := c.Bind(&q); err != nil {
 		return err
 	}
-	data, err := h.srv.MainVideos(c.Request().Context(), q)
+	uid, _ := xecho.CurUserID(c)
+	data, err := h.srv.MainVideos(c.Request().Context(), q, uid)
 	if err != nil {
 		return err
 	}

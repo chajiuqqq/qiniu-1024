@@ -6,6 +6,32 @@ import (
 	"testing"
 )
 
+func initVideos(t *testing.T) {
+	err := srv.Mongo.Collection(model.Video{}.Collection()).Drop(ctx)
+	assert.NoError(t, err)
+	vs := []model.Video{
+		{
+			ID:       1,
+			UserID:   100001,
+			Comments: make([]model.Comment, 0),
+		},
+		{
+			ID:       2,
+			UserID:   100001,
+			Comments: make([]model.Comment, 0),
+		},
+		{
+			ID:       3,
+			Comments: make([]model.Comment, 0),
+		},
+	}
+	for _, v := range vs {
+		_, err = srv.Mongo.Collection(model.Video{}.Collection()).InsertOne(ctx, v)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
 func TestService_VideoStatusUpdate(t *testing.T) {
 	err := srv.Mongo.Collection(model.Video{}.Collection()).Drop(ctx)
 	assert.NoError(t, err)
