@@ -17,6 +17,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "isomorphic-unfetch": "^4.0.2",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.291.0",
     "next": "^14.0.0",
     "node-fetch": "^3.3.2",

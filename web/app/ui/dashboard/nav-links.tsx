@@ -20,11 +20,6 @@ const links = [
     href: "/my",
     icon: UserIcon,
   },
-  {
-    name: "登录",
-    href: "/login",
-    icon: UserIcon,
-  },
   { name: "喜欢", href: "/likes", icon: HeartIcon },
   { name: "收藏", href: "/collection", icon: StarIcon },
   { name: "关注", href: "/follow", icon: UserPlusIcon },

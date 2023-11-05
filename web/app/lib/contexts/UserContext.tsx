@@ -1,26 +1,28 @@
 // contexts/UserContext.tsx
 import { createContext, useContext, ReactNode, useState } from 'react';
+import { User } from '../api/types';
+import api from '../api/api-client';
 
-export type UserType = {
-  name: string;
-  token: string;
-  followCnt:number;
-  followerCnt:number;
-  userLikesCnt:number;
-  desc:string;
-  avatar:string;
-};
-
+import Cookies from 'js-cookie';
 type UserContextType = {
-  user: UserType;
-  setUser: React.Dispatch<React.SetStateAction<UserType>>;
+  user: User|undefined;
+  setUser: React.Dispatch<React.SetStateAction<User|undefined>>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserType>({name:"张三",token:"1234",followCnt:100,followerCnt:20,userLikesCnt:89,desc:'我是乐观开朗的孩子',avatar:'/avatar.jpg'});
-
+  const u = getLocalUser()
+  // 获取存储在客户端的 JWT
+  const token = Cookies.get('token')?.value;
+  if (u == undefined && token!=undefined) {
+    api.user.curUser().then((res) => {
+      setUser(res.data)
+    }).catch((err) => {
+      console.log('get current user error', err)
+    })
+  }
+  const [user, setUser] = useState<User|undefined>(u);
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
@@ -35,3 +37,13 @@ export const useUser = () => {
   }
   return context;
 };
+
+export const getLocalUser: () => User | undefined = () => {
+  const u = localStorage.getItem('user');
+  // 从 localStorage 获取数据时，再将 JSON 字符串转回 JavaScript 对象
+  if(u){
+    const user = JSON.parse(u);
+    return user
+  }
+  return undefined
+}

@@ -9,13 +9,6 @@ const handleSearch = (searchTerm: string) => {
   // 在这里添加具体的搜索逻辑
 };
 
-// 用户状态数据（示例）
-const userStatusData = {
-  avatarUrl: "/avatar.jpg", // 实际的头像路径
-  worksCount: 10, // 示例数据
-  likesCount: 20, // 示例数据
-  followersCount: 15, // 示例数据
-};
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -26,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SideNav />
           </div>
           <div className="flex h-full flex-col w-full space-y-2 p-5">
-            <TopNav onSearch={handleSearch} userStatus={userStatusData} />
+            <TopNav onSearch={handleSearch}/>
             <div className="flex-grow rounded-md">{children}</div>
           </div>
         </div>
