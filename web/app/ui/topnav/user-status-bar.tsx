@@ -12,7 +12,7 @@ const UserStatusBar: React.FC = () => {
   const { user, setUser } = useUser()
 
   return (
-    <div className="flex items-center space-x-4 p-4">
+    <div className="flex items-center space-x-4">
       {/* 用户头像 */}
       {/* <img
         src={user.avatar_url}

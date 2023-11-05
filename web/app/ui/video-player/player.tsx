@@ -29,25 +29,20 @@ const PlyrComponent: React.FC<PlyrOption> = ({ url, desc }) => {
     const plyrInstance = ref.current?.plyr as Plyr;
     if (plyrInstance) plyrInstance.speed = 2;
   };
-
-  const plyrVideo = (
-    <Plyr
-      ref={ref}
-      source={{
-        type: "video",
-        sources: [
-          {
-            src: url,
-          },
-        ],
-      }}
-      options={videoOptions}
-    />
-  );
-
   return (
     <div className="w-full relative">
-      {plyrVideo}
+      <Plyr
+        ref={ref}
+        source={{
+          type: "video",
+          sources: [
+            {
+              src: url,
+            },
+          ],
+        }}
+        options={videoOptions}
+      />
       <div className="absolute bottom-10 left-5">
         <h2 className="text-2xl text-white">{url}</h2>
         <div>{desc}</div>

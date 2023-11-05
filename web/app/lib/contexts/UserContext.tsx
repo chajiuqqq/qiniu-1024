@@ -2,7 +2,6 @@
 import { createContext, useContext, ReactNode, useState } from 'react';
 import { User } from '../api/types';
 import api from '../api/api-client';
-
 import Cookies from 'js-cookie';
 type UserContextType = {
   user: User|undefined;
@@ -39,11 +38,13 @@ export const useUser = () => {
 };
 
 export const getLocalUser: () => User | undefined = () => {
-  const u = localStorage.getItem('user');
-  // 从 localStorage 获取数据时，再将 JSON 字符串转回 JavaScript 对象
-  if(u){
-    const user = JSON.parse(u);
-    return user
+  if (typeof window !== 'undefined') {
+    const u = localStorage.getItem('user');
+    // 从 localStorage 获取数据时，再将 JSON 字符串转回 JavaScript 对象
+    if(u){
+      const user = JSON.parse(u);
+      return user
+    }
   }
   return undefined
 }

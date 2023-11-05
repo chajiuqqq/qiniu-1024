@@ -58,7 +58,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
     <>
       {videos.length > 0 && index >= 0 && index < videos.length ? (
         <>
-          <div className="w-full">
+          <div className="w-11/12">
             <PlyrComponent
               url={videos[index].play_url}
               desc={videos[index].description}

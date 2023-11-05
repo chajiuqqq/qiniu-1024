@@ -1,6 +1,6 @@
 // api-client.js
 import axios from 'axios';
-import { User, UserRegisterPayload } from './types';
+import { MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video } from './types';
 import Cookies from 'js-cookie';
 const apiClient = axios.create({
   baseURL: 'http://47.106.228.5:9133/v1',
@@ -39,6 +39,24 @@ const register= async (data:UserRegisterPayload) => {
 const curUser =async () => {
   const url = '/current-user'
   return apiClient.get<User>(url)
+}
+
+const videos = async () => {
+  let url= '/videos'
+  return apiClient.get(url)
+}
+
+const video = async (id:number) => {
+  let url= `/video/${id}`
+  return apiClient.get(url)
+}
+const postVideo = async (d:MainVideoSubmit) => {
+  let url= `/video`
+  return apiClient.post<Video>(url,d)
+}
+const uploadVideo = async (file:File) => {
+  let url= `/upload`
+  return apiClient.post<UploadResponse>(url,file)
 }
 
 const user = {
