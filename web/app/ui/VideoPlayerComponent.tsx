@@ -60,8 +60,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
         <>
           <div className="">
             <PlyrComponent
-              url={videos[index].play_url}
-              desc={videos[index].description}
+             {...videos[index]}
             />
           </div>
         </>

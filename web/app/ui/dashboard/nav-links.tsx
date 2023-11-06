@@ -27,9 +27,9 @@ const links = [
   { name: "关注", href: "/follow", icon: UserPlusIcon },
 ];
 const links2 = [
-  { name: "旅游", href: "/dashboard/customers", icon: EllipsisHorizontalIcon },
-  { name: "美食", href: "/dashboard/customers", icon: EllipsisHorizontalIcon },
-  { name: "户外", href: "/dashboard/customers", icon: EllipsisHorizontalIcon },
+  { name: "旅游", href: "/category/1", icon: EllipsisHorizontalIcon },
+  { name: "美食", href: "/category/2", icon: EllipsisHorizontalIcon },
+  { name: "户外", href: "/category/3", icon: EllipsisHorizontalIcon },
 ];
 
 export default function NavLinks() {
