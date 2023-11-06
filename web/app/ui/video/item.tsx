@@ -9,12 +9,12 @@ import {
   MyShareIcon,
   MyPlayIcon
 } from "@/app/ui/icon";
-import { VideoType } from "@/app/lib/video";
 import { ProfileTab } from "@/app/lib/const";
+import { MainVideoItem } from "@/app/lib/api/types";
 interface VideoItemProps {
   imgUrl: string;
   type: ProfileTab;
-  curVideo: VideoType;
+  curVideo: MainVideoItem;
   onClick:(videoID:number)=>void
 }
 

@@ -3,11 +3,12 @@ import Profile from "@/app/ui/my/profile";
 import Menu from "../ui/my/menu";
 import { useState, useReducer, useEffect } from "react";
 import VideoItemList from "../ui/video/list";
-import { initalVideos } from "../lib/data";
 import { ProfileTab } from "../lib/const";
 import Popup from "../ui/Popup";
 import VideoPlayerComponent from "../ui/VideoPlayerComponent";
-import { VideoType } from "../lib/video";
+import { MainVideoItem } from "../lib/api/types";
+import api from "../lib/api/api-client";
+import { useUser } from "../lib/contexts/UserContext";
 const getProfileType = function (index: number): ProfileTab {
   switch (index) {
     case 0:
@@ -46,18 +47,20 @@ const popReducer = (state: State, action: Action): State => {
 const My = () => {
   const [menuIndex, setMenuIndex] = useState(0);
   const [popStatue, popDispatch] = useReducer(popReducer, initialState);
-  const [videos, setVideos] = useState<VideoType[]>(initalVideos)
+  const [videos, setVideos] = useState<MainVideoItem[] | undefined>()
   const [startedVideoID, setStartedVideoID] = useState<number>(-1)
-  const myUrl = "http://47.106.228.5:9133/v1/main/videos?category_id=1";
-  const dev = true
+  const dev = false
+  const { user } = useUser()
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     let ignore = false;
     if (!dev) {
-      fetch(myUrl)
-        .then((response) => response.json())
-        .then((data) => {
+      const q = user ? { user_id: user.id } : undefined
+      api.video.getVideos(q)
+        .then((res) => {
           if (!ignore) {
-            setVideos(data);
+            setLoading(false)
+            setVideos(res.data);
           }
         });
     }
@@ -66,13 +69,13 @@ const My = () => {
     };
   }, []);
   const handleUpdateVideos = () => {
+    setLoading(true)
     if (dev) {
-        setVideos(initalVideos)
     } else {
-      fetch(myUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          setVideos(data)
+      api.video.getVideos()
+        .then((res) => {
+          setLoading(false)
+          setVideos(res.data);
         });
     }
   }
@@ -91,13 +94,15 @@ const My = () => {
     <>
       <Profile></Profile>
       <Menu index={menuIndex} setIndex={setMenuIndex} />
-      <div className="p-4">
-        <VideoItemList videos={initalVideos} type={getProfileType(menuIndex)} onClick={handleVideoItemClick} />
-      </div>
-      {popStatue.isPopupVisible && (
+      {videos && (
+        <div className="p-4">
+          <VideoItemList videos={videos} type={getProfileType(menuIndex)} onClick={handleVideoItemClick} />
+        </div>)
+      }
+
+      {popStatue.isPopupVisible && videos && (
         <Popup onClose={closePopup}>
           <VideoPlayerComponent videos={videos} updateVideos={handleUpdateVideos} startedVideoID={startedVideoID}></VideoPlayerComponent>
-          {/* <h1>hello</h1> */}
         </Popup>
       )}
     </>

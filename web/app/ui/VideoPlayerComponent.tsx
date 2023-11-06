@@ -1,11 +1,11 @@
 "use client";
 import PlyrComponent from "@/app/ui/video-player/player";
 import React,{ useState, useEffect } from "react";
-import { VideoType } from "../lib/video";
 import Loading from "./loading";
+import { MainVideoItem } from "../lib/api/types";
 
 interface VideoPlayerProps {
-  videos:VideoType[];
+  videos:MainVideoItem[];
   dev?:boolean;
   updateVideos:()=>void
   startedVideoID?:number
@@ -58,7 +58,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
     <>
       {videos.length > 0 && index >= 0 && index < videos.length ? (
         <>
-          <div className="w-11/12">
+          <div className="">
             <PlyrComponent
               url={videos[index].play_url}
               desc={videos[index].description}

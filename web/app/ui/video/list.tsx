@@ -1,11 +1,11 @@
 // VideoItemList.tsx
 import React from "react";
 import VideoItem from "./item";
-import { VideoType } from "@/app/lib/video";
 import { ProfileTab } from "@/app/lib/const";
+import { MainVideoItem } from "@/app/lib/api/types";
 
 interface VideoItemListProps {
-  videos: VideoType[];
+  videos: MainVideoItem[];
   type: ProfileTab;
   onClick:(videoID:number)=>void
 }

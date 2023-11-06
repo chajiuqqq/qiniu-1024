@@ -1,6 +1,6 @@
 // api-client.js
 import axios from 'axios';
-import { MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video } from './types';
+import { MainVideoItem, MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video, VideoQuery } from './types';
 import Cookies from 'js-cookie';
 const apiClient = axios.create({
   baseURL: 'http://47.106.228.5:9133/v1',
@@ -10,11 +10,13 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   config => {
     // 获取存储在客户端的 JWT
-    const token = Cookies.get('token')?.value;
+    const token = Cookies.get('token');
 
     // 如果有 token，则在每个请求的头部添加 Authorization
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }else{
+      console.log('no token')
     }
 
     // 返回修改后的配置
@@ -41,12 +43,14 @@ const curUser =async () => {
   return apiClient.get<User>(url)
 }
 
-const videos = async () => {
+const getVideos = async (q?:VideoQuery) => {
   let url= '/videos'
-  return apiClient.get(url)
+  return apiClient.get<MainVideoItem[]>(url,{
+    params:q,
+  })
 }
 
-const video = async (id:number) => {
+const getVideo = async (id:number) => {
   let url= `/video/${id}`
   return apiClient.get(url)
 }
@@ -54,7 +58,7 @@ const postVideo = async (d:MainVideoSubmit) => {
   let url= `/video`
   return apiClient.post<Video>(url,d)
 }
-const uploadVideo = async (file:File) => {
+const uploadVideo = async (file:FormData) => {
   let url= `/upload`
   return apiClient.post<UploadResponse>(url,file)
 }
@@ -64,8 +68,15 @@ const user = {
   register,
   curUser,
 };
+const video={
+  getVideos,
+  getVideo,
+  postVideo,
+  uploadVideo
+}
 const api={
-  user
+  user,
+  video
 }
 
 export default api

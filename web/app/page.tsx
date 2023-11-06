@@ -1,22 +1,31 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import VideoPlayerComponent from "@/app/ui/VideoPlayerComponent";
-import { VideoType } from "./lib/video";
-import { initalVideos } from "./lib/data";
 import Loading from "./ui/loading";
+import { MainVideoItem, Video } from "./lib/api/types";
+import api from "./lib/api/api-client";
+import { useUser } from "./lib/contexts/UserContext";
+import { redirect } from "next/navigation";
 const Page = () => {
-  const [videos, setVideos] = useState<VideoType[]>(initalVideos)
-  const hotUrl = "http://47.106.228.5:9133/v1/main/videos?category_id=1";
-  const dev = true
+  const [videos, setVideos] = useState<MainVideoItem[] | undefined>()
+  const [loading, setLoading] = useState(true)
+  const {user} = useUser()
+  const dev = false
+  if (!user){
+    redirect('/login')
+  }
   useEffect(() => {
     let ignore = false;
     if (!dev) {
-      fetch(hotUrl)
-        .then((response) => response.json())
-        .then((data) => {
+      api.video.getVideos()
+        .then((res) => {
           if (!ignore) {
-            setVideos(data);
+            setLoading(false)
+            setVideos(res.data);
           }
+        }).catch((err)=>{
+          console.log(err)
+          throw err
         });
     }
     return () => {
@@ -24,20 +33,21 @@ const Page = () => {
     };
   }, []);
   const handleUpdateVideos = () => {
+    setLoading(true)
     if (dev) {
-      setVideos(initalVideos)
     } else {
-      fetch(hotUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          setVideos(data)
+      api.video.getVideos()
+        .then((res) => {
+          setLoading(false)
+          setVideos(res.data);
         });
     }
   }
   return (
     <>
-    {/* <Loading></Loading>  */}
-      <VideoPlayerComponent videos={videos} updateVideos={handleUpdateVideos}></VideoPlayerComponent>
+      {loading ? (<Loading></Loading>) : ''}
+      {videos ? (
+        <VideoPlayerComponent videos={videos} updateVideos={handleUpdateVideos}></VideoPlayerComponent>) : ''}
     </>
   );
 };

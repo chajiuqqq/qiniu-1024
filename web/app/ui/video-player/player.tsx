@@ -21,17 +21,10 @@ interface PlyrOption {
 const PlyrComponent: React.FC<PlyrOption> = ({ url, desc }) => {
   const ref = useRef<APITypes>(null);
 
-  const enterVideo = () => {
-    (ref.current?.plyr as Plyr)?.fullscreen.enter();
-  };
-
-  const make2x = () => {
-    const plyrInstance = ref.current?.plyr as Plyr;
-    if (plyrInstance) plyrInstance.speed = 2;
-  };
   return (
-    <div className="w-full relative">
+    <div className="relative">
       <Plyr
+        // className="w-6/12"
         ref={ref}
         source={{
           type: "video",

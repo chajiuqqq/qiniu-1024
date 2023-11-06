@@ -9,22 +9,22 @@ export type UserRegisterPayload = {
 
 type UserLikeItem = {
     user_id: number;
-    created_at: Date;
+    created_at: string;
 }
 
 type FollowItem = {
     user_id: number;
-    created_at: Date;
+    created_at: string;
 }
 
 type LikeItem = {
     video_id: number;
-    created_at: Date;
+    created_at: string;
 }
 
 type CollectionItem = {
     video_id: number;
-    created_at: Date;
+    created_at: string;
 }
 
 export type User = {
@@ -42,8 +42,8 @@ export type User = {
     followers?: FollowItem[];
     likes?: LikeItem[];
     collections?: CollectionItem[];
-    created_at?: Date;
-    updated_at?: Date;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export type MainVideoSubmit = {
@@ -55,37 +55,52 @@ export type MainVideoSubmit = {
 export type Comment = {
     id: number;
     content: string;
-    userId: number;
-    videoId: number;
-    likesCount: number;
-    isDeleted: boolean;
-    updatedAt: Date;
-    createdAt: Date;
+    user_id: number;
+    video_id: number;
+    likes_count: number;
+    is_deleted: boolean;
+    updated_at: string;
+    created_at: string;
 };
 
 export type Video = {
     id: number;
     number: number;
-    userId: number;
-    categoryId: number;
+    user_id: number;
+    category_id: number;
     category: string;
-    playUrl: string;
-    coverUrl: string;
+    play_url: string;
+    cover_url: string;
     description: string;
-    playCount: number;
-    likesCount: number;
-    collectCount: number;
-    comments: Comment[];
+    play_count: number;
+    likes_count: number;
+    collect_count: number;
+    comments?: Comment[];
     status: string; // ["Uploading", "New", "OnShow", "UnderShow"]
-    coverStatus: string; // ["Uploading", "Success", "Failed"]
-    isDeleted: boolean;
-    uploadedAt?: Date | null;
-    coverUploadedAt?: Date | null;
-    submittedAt?: Date | null;
-    deletedAt?: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
+    cover_status: string; // ["Uploading", "Success", "Failed"]
+    is_deleted: boolean;
+    uploaded_at?: string | null;
+    cover_uploaded_at?: string | null;
+    submitted_at?: string | null;
+    deleted_at?: string | null;
+    created_at: string;
+    updated_at: string;
 };
 export type UploadResponse = {
     vid:number,
 }
+
+export type MainVideoItem = Video &{
+    user_id: number;
+    nickname: string;
+    avatar_url: string;
+    follower_cnt: number;
+    published_cnt: number;
+    liked: boolean;
+    collected: boolean;
+    score: number;
+  };
+  export type VideoQuery = {
+    category_id?:number,
+    user_id?:number
+  }
