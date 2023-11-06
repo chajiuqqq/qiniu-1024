@@ -60,7 +60,7 @@ const getVideos = async (q?:VideoQuery) => {
 
 const getVideo = async (id:number) => {
   let url= `/video/${id}`
-  return apiClient.get(url)
+  return apiClient.get<MainVideoItem>(url)
 }
 const postVideo = async (d:MainVideoSubmit) => {
   let url= `/video`
