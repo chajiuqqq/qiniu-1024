@@ -22,7 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="p-2 flex-grow outline-none border-none bg-transparent"
-        placeholder="搜索..."
+        placeholder="coming soon..."
       />
       <button onClick={handleSubmit} className="p-2">
             <MagnifyingGlassIcon className="h-6 w-6 text-gray-500" />

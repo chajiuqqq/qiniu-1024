@@ -7,7 +7,7 @@ import api from "@/app/lib/api/api-client";
 import { useUser } from "@/app/lib/contexts/UserContext";
 import { redirect } from "next/navigation";
 const Main = (query?:VideoQuery) => {
-  const [videos, setVideos] = useState<MainVideoItem[] | undefined>()
+  const [videos, setVideos] = useState<MainVideoItem[]>()
   const [loading, setLoading] = useState(true)
   const {user} = useUser()
   const dev = false
@@ -36,7 +36,7 @@ const Main = (query?:VideoQuery) => {
     setLoading(true)
     if (dev) {
     } else {
-      api.video.getVideos()
+      api.video.getVideos(query)
         .then((res) => {
           setLoading(false)
           setVideos(res.data);
@@ -47,7 +47,7 @@ const Main = (query?:VideoQuery) => {
     <>
       {loading ? (<Loading></Loading>) : ''}
       {videos ? (
-        <VideoPlayerComponent videos={videos} updateVideos={handleUpdateVideos}></VideoPlayerComponent>) : ''}
+        <VideoPlayerComponent videos={videos} setVideos={setVideos} updateVideos={handleUpdateVideos}></VideoPlayerComponent>) : ''}
     </>
   );
 };

@@ -14,13 +14,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <UserProvider>
-        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+        <div className="flex h-screen w-screen flex-row overflow-hidden">
           <div className="w-full flex-none md:w-64">
             <SideNav />
           </div>
           <div className="flex h-full flex-col w-full space-y-2 p-5">
+            <div className="h-min">
             <TopNav onSearch={handleSearch}/>
-            <div className="flex-grow rounded-md">{children}</div>
+            </div>
+            <div className="h-min">
+            {children}
+            </div>
           </div>
         </div>
         </UserProvider>

@@ -6,16 +6,17 @@ import { MainVideoItem } from "../lib/api/types";
 
 interface VideoPlayerProps {
   videos:MainVideoItem[];
+  setVideos: React.Dispatch<React.SetStateAction<MainVideoItem[] | undefined>>
   dev?:boolean;
   updateVideos:()=>void
   startedVideoID?:number
 }
-const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,dev=true,startedVideoID}) => {
+const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,setVideos,updateVideos,dev=true,startedVideoID}) => {
   const startedIndex = videos.findIndex(video => video.id === startedVideoID);
   const [index, setIndex] = useState<number>(startedIndex==-1?0:startedIndex);
   const nextVideo = () => {
     if (index < videos.length - 1) {
-      setIndex((index) => index + 1);
+      setIndex(n=>n+1);
     } else {
       updateVideos()
       setIndex(0)
@@ -24,7 +25,7 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
 
   const lastVideo = () => {
     if (index > 0) {
-      setIndex((index) => index - 1);
+      setIndex(n=>n-1);
     }
   };
 
@@ -33,11 +34,9 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
         case "ArrowUp":
-          console.log("上箭头键被按下了");
           lastVideo();
           break;
         case "ArrowDown":
-          console.log("下箭头键被按下了");
           nextVideo();
           break;
         default:
@@ -53,16 +52,41 @@ const VideoPlayerComponent:React.FC<VideoPlayerProps> = ({videos,updateVideos,de
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []); 
-
+  const handleLike = ()=>{
+    let vs =[...videos]
+    vs[index].likes_count+=1
+    vs[index].liked=true
+    setVideos(vs)
+  }
+  const handleCancelLike = ()=>{
+    let vs =[...videos]
+    vs[index].likes_count-=1
+    vs[index].liked=false
+    setVideos(vs)
+  }
+  const handleCollect = ()=>{
+    let vs =[...videos]
+    vs[index].collect_count+=1
+    vs[index].collected=true
+    setVideos(vs)
+  }
+  const handleCancelCollect = ()=>{
+    let vs =[...videos]
+    vs[index].collect_count-=1
+    vs[index].collected=false
+    setVideos(vs)
+  }
   return (
     <>
       {videos.length > 0 && index >= 0 && index < videos.length ? (
         <>
-          <div className="">
             <PlyrComponent
-             {...videos[index]}
+             v={videos[index]}
+             onLike={handleLike}
+             onCancelLike={handleCancelLike}
+             onCollect={handleCollect}
+             onCancelCollect={handleCancelCollect}
             />
-          </div>
         </>
       ) : (
         <Loading></Loading> 

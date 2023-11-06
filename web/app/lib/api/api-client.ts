@@ -42,6 +42,14 @@ const curUser =async () => {
   const url = '/current-user'
   return apiClient.get<User>(url)
 }
+const userAction =async (id:number,action: 'Like'| 'Follow'| 'LikeCancel'| 'FollowCancel') => {
+  const url = `/user/${id}/action`
+  return apiClient.post(url,null,{
+    params:{
+      action:action
+    }
+  })
+}
 
 const getVideos = async (q?:VideoQuery) => {
   let url= '/videos'
@@ -67,11 +75,36 @@ const getCategories =async () => {
   const url  = '/categories'
   return apiClient.get<Category[]>(url)
 }
+const playVideo =async (id:number) => {
+  const url = `/action/play/video/${id}`
+  return apiClient.post(url)
+}
+
+const likeVideo =async (id:number) => {
+  const url = `/action/like/video/${id}`
+  return apiClient.post(url)
+}
+
+const collectVideo =async (id:number) => {
+  const url = `/action/collect/video/${id}`
+  return apiClient.post(url)
+}
+
+const cancelLikeVideo =async (id:number) => {
+  const url = `/action/like/video/${id}`
+  return apiClient.delete(url)
+}
+
+const cancelCollectVideo =async (id:number) => {
+  const url = `/action/collect/video/${id}`
+  return apiClient.delete(url)
+}
 
 const user = {
   login,
   register,
   curUser,
+  userAction
 };
 const video={
   getVideos,
@@ -82,10 +115,18 @@ const video={
 const category={
   getCategories
 }
+const action = {
+  playVideo,
+  likeVideo,
+  collectVideo,
+  cancelLikeVideo,
+  cancelCollectVideo,
+}
 const api={
   user,
   video,
-  category
+  category,
+  action
 }
 
 export default api
