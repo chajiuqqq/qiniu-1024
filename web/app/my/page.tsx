@@ -9,6 +9,7 @@ import VideoPlayerComponent from "../ui/VideoPlayerComponent";
 import { MainVideoItem } from "../lib/api/types";
 import api from "../lib/api/api-client";
 import { useUser } from "../lib/contexts/UserContext";
+import Loading from "../ui/loading";
 const getProfileType = function (index: number): ProfileTab {
   switch (index) {
     case 0:
@@ -94,10 +95,14 @@ const My = () => {
     <>
       <Profile></Profile>
       <Menu index={menuIndex} setIndex={setMenuIndex} />
-      {videos && (
+      {videos ?(
         <div className="p-4">
           <VideoItemList videos={videos} type={getProfileType(menuIndex)} onClick={handleVideoItemClick} />
-        </div>)
+        </div>):(
+          <>
+          <Loading></Loading>
+          </>
+        )
       }
 
       {popStatue.isPopupVisible && videos && (

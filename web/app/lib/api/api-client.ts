@@ -1,6 +1,6 @@
 // api-client.js
-import axios from 'axios';
-import { MainVideoItem, MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video, VideoQuery } from './types';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Category, MainVideoItem, MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video, VideoQuery } from './types';
 import Cookies from 'js-cookie';
 const apiClient = axios.create({
   baseURL: 'http://47.106.228.5:9133/v1',
@@ -58,9 +58,14 @@ const postVideo = async (d:MainVideoSubmit) => {
   let url= `/video`
   return apiClient.post<Video>(url,d)
 }
-const uploadVideo = async (file:FormData) => {
+const uploadVideo = async (file:FormData,args?:AxiosRequestConfig) => {
   let url= `/upload`
-  return apiClient.post<UploadResponse>(url,file)
+  return apiClient.post<UploadResponse>(url,file,args)
+}
+
+const getCategories =async () => {
+  const url  = '/categories'
+  return apiClient.get<Category[]>(url)
 }
 
 const user = {
@@ -74,9 +79,13 @@ const video={
   postVideo,
   uploadVideo
 }
+const category={
+  getCategories
+}
 const api={
   user,
-  video
+  video,
+  category
 }
 
 export default api

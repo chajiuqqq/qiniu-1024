@@ -43,11 +43,12 @@ const UserStatusBar: React.FC = () => {
           </>
 
         ) : (
-          <><Link href='/register'>
-            <div className="cursor-pointer w-24 flex justify-center text-center border text-sm font-medium border-indigo-400 rounded-md text-indigo-400 py-2 px-4 hover:text-indigo-600 hover:border-indigo-600">
-              创建
-            </div>
-          </Link>
+          <>
+            <Link href='/register'>
+              <div className="cursor-pointer w-24 flex justify-center text-center border text-sm font-medium border-indigo-400 rounded-md text-indigo-400 py-2 px-4 hover:text-indigo-600 hover:border-indigo-600">
+                创建
+              </div>
+            </Link>
             <Link href='/login'>
               <div className=" w-32 flex justify-center text-center rounded-lg px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 登录

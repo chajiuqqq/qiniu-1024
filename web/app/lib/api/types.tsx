@@ -47,8 +47,8 @@ export type User = {
 }
 
 export type MainVideoSubmit = {
-    categoryId: number;
-    videoId: number;
+    category_id: number;
+    video_id: number;
     desc: string;
 };
 
@@ -104,3 +104,11 @@ export type MainVideoItem = Video &{
     category_id?:number,
     user_id?:number
   }
+
+  export type Category = {
+    id: number;
+    name: string;
+    order: number;
+    onShow: boolean;
+  };
+  
