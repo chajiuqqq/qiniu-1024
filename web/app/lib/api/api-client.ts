@@ -2,8 +2,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { Category, MainVideoItem, MainVideoSubmit, UploadResponse, User, UserRegisterPayload, Video, VideoQuery } from './types';
 import Cookies from 'js-cookie';
+let host = process.env.CUR_ENV == 'prod'? 'http://api:9133/v1':'http://47.106.228.5:9133/v1'
+
 const apiClient = axios.create({
-  baseURL: 'http://47.106.228.5:9133/v1',
+  baseURL: host,
 });
 
 // 请求拦截器

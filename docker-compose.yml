@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  api:
+    image: chajiuqqq/new-video-api
+    ports:
+      - 9133:9133
+    volumes:
+      - ~/conf:/conf
+    networks:
+      - new-video-net
+  web:
+    image: chajiuqqq/new-video-web
+    ports:
+      - 3000:3000
+    networks:
+      - new-video-net
+networks:
+  new-video-net:

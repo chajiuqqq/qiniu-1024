@@ -29,7 +29,7 @@ jobs:
       # 运行测试
       - name: Run tests
         run: cd server && go test ./...
-  api:
+  api-build:
     needs: go-test
     runs-on: ubuntu-latest
     steps:
@@ -47,4 +47,23 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: chajiuqqq/niuniu-video-api:latest
+          tags: chajiuqqq/new-video-api:latest
+  web-build:
+    needs: go-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./web
+          push: true
+          tags: chajiuqqq/new-video-web:latest
