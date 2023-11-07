@@ -29,7 +29,7 @@ New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网
 - 视频分类浏览
 
 <div align="center">
-        <img src="doc/img/main.png" alt="Logo" width="70">
+        <img src="doc/img/main.png" alt="Logo" width="70%">
 </div>
 
 # 上手指南
@@ -61,18 +61,18 @@ New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网
 
 <div align="center">
     <div>
-        <img src="doc/img/my.png" alt="Logo" width="70">
+        <img src="doc/img/my.png" alt="Logo" width="70%">
         <p>个人详情</p>   
-        <img src="doc/img/publish.png" alt="Logo" width="70">
+        <img src="doc/img/publish.png" alt="Logo" width="70%">
         <p>发布</p>   
     </div>
     <div>
-        <img src="doc/img/food.png" alt="Logo" width="70">
+        <img src="doc/img/food.png" alt="Logo" width="70%">
         <p>分类页</p>   
     </div>
     <div>
-        <img src="doc/img/login.png" alt="Logo" width="50">
-        <img src="doc/img/register.png" alt="Logo" width="50">
+        <img src="doc/img/login.png" alt="Logo" width="50%">
+        <img src="doc/img/register.png" alt="Logo" width="50%">
         <p>注册、登录</p>   
     </div>
 </div>
