@@ -5,9 +5,12 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 
 import Cookies from 'js-cookie';
 import { redirect, useRouter } from 'next/navigation';
+import { useUser } from '@/app/lib/contexts/UserContext';
 export default function SideNav() {
   const router = useRouter()
+  const {setUser} = useUser()
   const signout = () => {
+    setUser(undefined)
     console.log('signout')
     localStorage.removeItem('user');
     Cookies.remove('token')
