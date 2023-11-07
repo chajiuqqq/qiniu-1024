@@ -18,7 +18,7 @@
   </a>
   </p>
 
-New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网站，用户可以自由注册登录，浏览不同分类的视频，也可以上传自己的视频成为博主哦。
+**New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网站，用户可以自由注册登录，浏览不同分类的视频，也可以上传自己的视频成为博主哦。**
 
 # 特点
 
@@ -40,13 +40,13 @@ New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网
     git clone https://github.com/chajiuqqq/qiniu-1024.git
 ```
 
-依赖：
+自行安装依赖：
 
 - go >= 1.21.0
 - node.js >= 18
 - MongoDB
 
-开发环境启动步骤：
+**开发环境启动步骤：**
 
 - Go：
   - 进入 server/cmd/api，修改 local.yaml，配置好 mongodb
@@ -57,12 +57,11 @@ New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网
   - 进入 app/lib/api/api-client.js，修改 go 后端 Endpoint 地址
   - 在 web 下运行`npm run dev`启动项目，在:3000 端口查看界面
 
-容器部署步骤：
+**容器部署步骤：**
 
-```
- // 在根目录下执行
-    docker compose up
-```
+- 修改 docker-compose.yml 中的挂载卷，在 conf 文件夹下建立 config.yaml,内容可以复制 local.yaml，并配置好 MongoDB 的地址
+- 在根目录下执行`docker compose up`
+- 访问 http://localhost:3000/
 
 ## 界面展示
 
@@ -139,3 +138,13 @@ root
 - TypeScript
 - TailWind CSS
 - Plyr 播放组件
+
+# 团队分工
+
+独立开发 Chris.Cai(chajiuqqq@gmail.com)
+
+# 致谢
+
+- [Next.js](https://nextjs.org/)
+- [React](https://zh-hans.react.dev/learn)
+- [ChatGPT](https://chat.openai.com/)
