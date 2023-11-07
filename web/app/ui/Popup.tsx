@@ -1,6 +1,6 @@
 // components/Popup.tsx
 import React from "react";
-import { MyCloseIcon } from "../lib/icon";
+import { MyCloseIcon } from "../../lib/icon";
 interface PopupProps {
   onClose: () => void;
   children: React.ReactNode;

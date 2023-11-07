@@ -8,7 +8,7 @@ import {
   MyCollectionIcon,
   MyShareIcon,
   MyPlayIcon,
-} from "@/app/lib/icon";
+} from "@/lib/icon";
 import { ProfileTab } from "@/app/lib/const";
 import { MainVideoItem } from "@/app/lib/api/types";
 interface VideoItemProps {
