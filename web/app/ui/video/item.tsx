@@ -15,10 +15,10 @@ interface VideoItemProps {
   imgUrl: string;
   type: ProfileTab;
   curVideo: MainVideoItem;
-  onClick:(videoID:number)=>void
+  onClick: (videoID: number) => void
 }
 
-const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo,onClick }) => {
+const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo, onClick }) => {
   let label;
   switch (type) {
     case ProfileTab.My:
@@ -34,20 +34,20 @@ const VideoItem: React.FC<VideoItemProps> = ({ imgUrl, type, curVideo,onClick })
       break;
   }
   return (
-    <div className="relative cursor-pointer" onClick={()=>{ console.log(curVideo.id,'clicked');onClick(curVideo.id)}}>
-      <div className=" w-64 bg-gray-200 rounded-md">
+    <div className=" cursor-pointer" onClick={() => { console.log(curVideo.id, 'clicked'); onClick(curVideo.id) }}>
+      <div className=" relative w-64 bg-gray-200 rounded-md">
         <img
           src={imgUrl}
           alt="Video Thumbnail"
           className="w-full h-full object-contain"
         />
+        <div className=" absolute bottom-1 left-1 flex space-x-2 justify-center items-center text-white bg-black/50 text-shadow p-2 rounded-md mr-2" >
+          {label}
+        </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 text-white bg-black/50 text-shadow p-2 rounded-md">
-      <div className="flex space-x-2" >
-        {label}
-      </div>
-        
+      <div className="w-64 flex space-x-2 pt-2">
+        {curVideo.description}
+        <span className="w-16 rounded-md text-sky-500">{curVideo.category && '#'}{curVideo.category}</span>
       </div>
     </div>
   );

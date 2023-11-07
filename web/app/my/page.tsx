@@ -63,6 +63,9 @@ const My = () => {
             setLoading(false)
             setVideos(res.data);
           }
+        }).catch(err=>{
+          setLoading(false)
+          console.log('获取个人视频失败，'+err)
         });
     }
     return () => {
@@ -73,7 +76,8 @@ const My = () => {
     setLoading(true)
     if (dev) {
     } else {
-      api.video.getVideos()
+      const q = user ? { user_id: user.id } : undefined
+      api.video.getVideos(q)
         .then((res) => {
           setLoading(false)
           setVideos(res.data);

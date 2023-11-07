@@ -4,16 +4,15 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/app/lib/contexts/UserContext';
+import { redirect, useRouter } from 'next/navigation';
 export default function SideNav() {
-  const {setUser} = useUser()
   const router = useRouter()
   const signout = () => {
     console.log('signout')
     localStorage.removeItem('user');
     Cookies.remove('token')
-    router.push('/')
+    router.push('/login')
+    // redirect('/login')
   }
   return (
     <div className="flex h-full flex-col px-3 py-3 md:px-2">
@@ -28,12 +27,10 @@ export default function SideNav() {
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
-        <form>
-          <button className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <PowerIcon className="w-6" />
-            <div className="hidden md:block" onClick={signout}>登出</div>
-          </button>
-        </form>
+        <button onClick={signout} className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+          <PowerIcon className="w-6" />
+          <div className="hidden md:block">登出</div>
+        </button>
       </div>
     </div>
   );

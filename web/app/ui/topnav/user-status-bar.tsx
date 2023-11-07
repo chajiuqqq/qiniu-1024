@@ -15,14 +15,14 @@ const UserStatusBar: React.FC = () => {
     <div className="flex items-center space-x-4">
       {user ? (
         <>
-          <div className="rounded-full border border-sky-300 p-2">
+          <div className="rounded-full p-2">
             <Link href="/my">{user.name}</Link>
           </div>
           <div className="flex flex-grow items-center justify-around space-x-4">
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <VideoCameraIcon className="h-6 w-6 text-sky-500" />
               <span>{`作品`}</span>
-            </div>
+            </div> */}
 
             <div className="flex items-center space-x-2">
               <HeartIcon className="h-6 w-6 text-pink-500" />

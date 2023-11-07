@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "./loading";
 import { MainVideoItem } from "../lib/api/types";
 import api from "../lib/api/api-client";
+import { useUser } from "../lib/contexts/UserContext";
 
 interface VideoPlayerProps {
   videos: MainVideoItem[];
@@ -19,6 +20,7 @@ const VideoPlayerComponent: React.FC<VideoPlayerProps> = ({
   dev = true,
   startedVideoID,
 }) => {
+  const {user,setUser} = useUser()
   const startedIndex = videos.findIndex((video) => video.id === startedVideoID);
   const [index, setIndex] = useState<number>(
     startedIndex == -1 ? 0 : startedIndex
@@ -85,6 +87,7 @@ const VideoPlayerComponent: React.FC<VideoPlayerProps> = ({
     vs[index].likes_count += 1;
     vs[index].liked = true;
     setVideos(vs);
+    // setUser
   };
   const handleCancelLike = () => {
     let vs = [...videos];
