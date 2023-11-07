@@ -1,4 +1,3 @@
-"use client";
 import {
   HeartIcon,
   StarIcon,
@@ -6,7 +5,7 @@ import {
   ShareIcon,
   PlayIcon,
   XMarkIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 const LikeIcon = () => {
   return <HeartIcon className="w-6 text-white"></HeartIcon>;
@@ -37,7 +36,17 @@ const MyCloseIcon = () => {
 };
 const MyArrowPathIcon = () => {
   return <ArrowPathIcon className="w-6 text-white"></ArrowPathIcon>;
-}
+};
 
-
-export { LikeIcon, MyLikeIcon, MyCommentIcon, MyCollectionIcon, MyShareIcon,MyPlayIcon,MyCloseIcon };
+export default () => {
+  return <ArrowPathIcon className="w-6 text-white"></ArrowPathIcon>;
+};
+export {
+  LikeIcon,
+  MyLikeIcon,
+  MyCommentIcon,
+  MyCollectionIcon,
+  MyShareIcon,
+  MyPlayIcon,
+  MyCloseIcon,
+};
