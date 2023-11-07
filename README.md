@@ -2,18 +2,18 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/chajiuqqq/qiniu-1024/">
+  <a href="https://github.com/chajiuqqq/qiniu-1024/" target="_blank">
     <img src="doc/img/logo.png" alt="Logo" width="50" height="50">
   </a>
   New视频
 </p>
 
 <p align="center">
-<a href="http://47.106.228.5:8080/new-video.mp4">
+<a href="http://47.106.228.5:8080/new-video.mp4" target="_blank">
     演示视频 
   </a>
   |
-  <a href="http://47.106.228.5:3000/">
+  <a href="http://47.106.228.5:3000/" target="_blank">
     Demo
   </a>
   </p>
