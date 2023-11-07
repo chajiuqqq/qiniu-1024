@@ -57,6 +57,13 @@ New 视频是一款使用七牛云 OSS 实现视频存储的 Web 端短视频网
   - 进入 app/lib/api/api-client.js，修改 go 后端 Endpoint 地址
   - 在 web 下运行`npm run dev`启动项目，在:3000 端口查看界面
 
+容器部署步骤：
+
+```
+ // 在根目录下执行
+    docker compose up
+```
+
 ## 界面展示
 
 <div align="center">
