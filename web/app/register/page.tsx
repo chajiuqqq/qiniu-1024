@@ -154,19 +154,6 @@ const Registration: React.FC = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <label htmlFor="avatar" className="sr-only">
-                  Avatar
-                </label>
-                <input
-                  id="avatar"
-                  name="avatar"
-                  type="file"
-                  required
-                  className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  onChange={(e) => setFormData({ ...formData, avatar: e.target.files?.[0]?.name || '' })}
-                />
-              </div>
             </div>
 
             <div>

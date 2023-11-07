@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import React, { useEffect, useState } from "react";
+import api from "@/app/lib/api/api-client";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
@@ -22,18 +24,43 @@ const links = [
     href: "/my",
     icon: UserIcon,
   },
-  { name: "喜欢", href: "/likes", icon: HeartIcon },
-  { name: "收藏", href: "/collection", icon: StarIcon },
-  { name: "关注", href: "/follow", icon: UserPlusIcon },
+  // { name: "喜欢", href: "/likes", icon: HeartIcon },
+  // { name: "收藏", href: "/collection", icon: StarIcon },
+  // { name: "关注", href: "/follow", icon: UserPlusIcon },
 ];
-const links2 = [
-  { name: "旅游", href: "/category/1", icon: EllipsisHorizontalIcon },
-  { name: "美食", href: "/category/2", icon: EllipsisHorizontalIcon },
-  { name: "户外", href: "/category/3", icon: EllipsisHorizontalIcon },
-];
+type navLink = {
+name:string,
+href:string,
+order:number,
+icon?:any
+}
 
 export default function NavLinks() {
   const pathname = usePathname();
+  const [cateLinks,setCateLinks] = useState<navLink[]>()
+  useEffect(()=>{
+    if(!cateLinks){
+      api.category.getCategories().then(res=>{
+        if (!cateLinks && res.data){
+          let links:navLink[] = []
+          for (let index = 0; index < res.data.length; index++) {
+            const e = res.data[index]
+            links.push({
+              name:e.name,
+              href:`/category/${e.id}`,
+              order:e.order,
+              icon: EllipsisHorizontalIcon
+            })
+          }
+          links.sort((a,b)=>{
+            return a.order-b.order
+          })
+          setCateLinks(links)
+        }
+      })
+    }
+    
+  },[])
   return (
     <>
       {links.map((link) => {
@@ -56,7 +83,7 @@ export default function NavLinks() {
       })}
       <br />
 
-      {links2.map((link) => {
+      {cateLinks && cateLinks.map((link) => {
         const LinkIcon = link.icon;
         return (
           <Link

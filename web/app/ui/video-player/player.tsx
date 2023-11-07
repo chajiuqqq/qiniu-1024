@@ -33,7 +33,7 @@ export const PlyrAttach: React.FC<opts> = ({
   return (
     <>
       <div className="absolute left-5 top-2 text-white z-30">{v.id}</div>
-      <div className="absolute bottom-10 left-5 bg-black/50 rounded-lg p-5 text-white w-64">
+      <div className="absolute bottom-10 left-5 bg-black/50 rounded-lg p-5 text-white min-w-min">
         <h2 className="text-2xl inline">@{v.nickname}</h2>
         <button className="border rounded-lg border-white px-4 py-1 ml-5 hover:border-sky-400 hover:text-sky-400">
           {" "}
@@ -81,7 +81,7 @@ const PlyrComponent: React.FC<ParentComponentProps> = ({
   const ref = useRef<APITypes>(null);
 
   return (
-    <div className="relative w-11/12">
+    <div className="relative w-full">
       <Plyr
         ref={ref}
         source={{

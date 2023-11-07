@@ -64,51 +64,48 @@ const FileUpload = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    try {
-      setLoading(true);
-      api.video
-        .uploadVideo(formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          setSubmitReq({
-            ...submitReq,
-            video_id: res.data.vid,
-          });
-          intervalRef.current = setInterval(() => {
-            console.log("query upload status...");
-            if (!uploadVideo) {
-              api.video
-                .getVideo(res.data.vid)
-                .then((res) => {
-                  if (
-                    res.data.status == "New" &&
-                    res.data.cover_status == "Success"
-                  ) {
-                    setLoading(false);
-                    setAlertText("上传成功!");
-                    console.log(res.data);
-                    setUploadVideo(res.data);
-                    clearInterval(intervalRef.current); // 清除定时器
-                  }
-                })
-                .catch((err) => {
-                  clearInterval(intervalRef.current); // 清除定时器
-                });
-            } else {
-              clearInterval(intervalRef.current); // 清除定时器
-            }
-          }, 2000);
+    setLoading(true);
+    api.video
+      .uploadVideo(formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setSubmitReq({
+          ...submitReq,
+          video_id: res.data.vid,
         });
-    } catch (error) {
-      setAlertText("上传失败！");
-      setLoading(false);
-      console.error("Error uploading file:", error);
-    }
+        intervalRef.current = setInterval(() => {
+          console.log("query upload status...");
+          if (!uploadVideo) {
+            api.video
+              .getVideo(res.data.vid)
+              .then((res) => {
+                if (
+                  res.data.status == "New" &&
+                  res.data.cover_status == "Success"
+                ) {
+                  setLoading(false);
+                  setAlertText("上传成功!");
+                  console.log(res.data);
+                  setUploadVideo(res.data);
+                  clearInterval(intervalRef.current); // 清除定时器
+                }
+              })
+              .catch((err) => {
+                clearInterval(intervalRef.current); // 清除定时器
+              });
+          } else {
+            clearInterval(intervalRef.current); // 清除定时器
+          }
+        }, 2000);
+      }).catch(e => {
+        setLoading(false);
+        setAlertText("上传失败！");
+        console.error("Error uploading file:", e);
+      })
   };
-
   const onUpload = async () => {
     setSubmitLoading(true);
     api.video
@@ -116,12 +113,14 @@ const FileUpload = () => {
       .then((res) => {
         setSubmitLoading(false);
         setAlertText("发布成功！");
+        setLoading(false);
         setTimeout(() => {
           router.push("/my");
         }, 1500);
       })
       .catch((err) => {
         setSubmitLoading(false);
+        setLoading(false);
         setAlertText("发布失败！");
       });
   };
@@ -195,9 +194,8 @@ const FileUpload = () => {
         </div>
         <button
           onClick={onUpload}
-          className={`w-5/12 bg-blue-600 text-white rounded-md px-5 py-2   ${
-            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
-          }`}
+          className={`w-5/12 bg-blue-600 text-white rounded-md px-5 py-2   ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
         >
           发布
           {submitLoading && (

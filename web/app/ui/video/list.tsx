@@ -12,7 +12,7 @@ interface VideoItemListProps {
 
 const VideoItemList: React.FC<VideoItemListProps> = ({ videos, type,onClick }) => {
   return (
-    <div className="grid  grid-cols-5 2xl:grid-cols-8 gap-4 w-full">
+    <div className="grid  grid-cols-4  gap-4 w-full">
       {videos.map((video, idx) => (
         <VideoItem
           key={idx}

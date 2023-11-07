@@ -13,7 +13,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const u = getLocalUser()
   // 获取存储在客户端的 JWT
-  const token = Cookies.get('token')?.value;
+  const token = Cookies.get('token')
   if (u == undefined && token!=undefined) {
     api.user.curUser().then((res) => {
       setUser(res.data)

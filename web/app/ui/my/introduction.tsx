@@ -11,8 +11,8 @@ const Introduction: React.FC<IntroductionProps> = ({
   onEdit,
 }) => {
   return (
-    <div className="flex items-center">
-      <p className="m-4 text-grey-100">{introduction}</p>
+    <div className="flex items-center pt-5">
+      <p className="text-grey-100">{introduction}</p>
       <button onClick={onEdit} className="text-blue-500 hover:text-blue-700">
         {/* <EditIcon></EditIcon> */}
       </button>

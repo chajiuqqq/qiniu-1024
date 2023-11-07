@@ -10,7 +10,7 @@ interface NameProps {
 const Name: React.FC<NameProps> = ({ name, onEdit }) => {
   return (
     <div className="flex items-center">
-      <p className="mr-4 text-xl font-semibold">{name}</p>
+      <p className="mr-4 text-xl font-semibold">@ {name}</p>
       <button
         onClick={onEdit}
         className="text-blue-500 hover:text-blue-700"

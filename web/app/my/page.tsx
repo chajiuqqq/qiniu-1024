@@ -48,7 +48,7 @@ const popReducer = (state: State, action: Action): State => {
 const My = () => {
   const [menuIndex, setMenuIndex] = useState(0);
   const [popStatue, popDispatch] = useReducer(popReducer, initialState);
-  const [videos, setVideos] = useState<MainVideoItem[] | undefined>()
+  const [videos, setVideos] = useState<MainVideoItem[]>()
   const [startedVideoID, setStartedVideoID] = useState<number>(-1)
   const dev = false
   const { user } = useUser()
@@ -104,10 +104,9 @@ const My = () => {
           </>
         )
       }
-
       {popStatue.isPopupVisible && videos && (
         <Popup onClose={closePopup}>
-          <VideoPlayerComponent videos={videos} updateVideos={handleUpdateVideos} startedVideoID={startedVideoID}></VideoPlayerComponent>
+          <VideoPlayerComponent videos={videos} setVideos={setVideos} updateVideos={handleUpdateVideos} startedVideoID={startedVideoID}></VideoPlayerComponent>
         </Popup>
       )}
     </>
