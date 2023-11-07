@@ -38,10 +38,10 @@ export type User = {
     github_account?: string;
     wechat_account?: string;
     user_likes?: UserLikeItem[];
-    follows?: FollowItem[];
-    followers?: FollowItem[];
-    likes?: LikeItem[];
-    collections?: CollectionItem[];
+    follows: FollowItem[];
+    followers: FollowItem[];
+    likes: LikeItem[];
+    collections: CollectionItem[];
     created_at?: string;
     updated_at?: string;
 }

@@ -2,7 +2,7 @@
 import PlyrComponent, { PlyrAttach } from "@/app/ui/video-player/player";
 import React, { useState, useEffect } from "react";
 import Loading from "./loading";
-import { MainVideoItem } from "../lib/api/types";
+import { MainVideoItem, User } from "../lib/api/types";
 import api from "../lib/api/api-client";
 import { useUser } from "../lib/contexts/UserContext";
 
@@ -84,28 +84,85 @@ const VideoPlayerComponent: React.FC<VideoPlayerProps> = ({
   }, [index]);
   const handleLike = () => {
     let vs = [...videos];
+    const vid = vs[index].id
     vs[index].likes_count += 1;
     vs[index].liked = true;
     setVideos(vs);
-    // setUser
+    setUser(u=>{
+      if(u){
+        const tmp:User = {
+          ...u,
+          collections:[...u.collections],
+          likes:[...u.likes,{
+            video_id:vid,
+            created_at:''
+          }]
+        }
+        return tmp
+      }
+      return u
+    })
   };
   const handleCancelLike = () => {
     let vs = [...videos];
+    const vid = vs[index].id
     vs[index].likes_count -= 1;
     vs[index].liked = false;
     setVideos(vs);
+    setUser(u=>{
+      if(u){
+        const tmp:User = {
+          ...u,
+          collections:[...u.collections],
+          likes: u.likes.filter(v=>{
+            v.video_id!=vid
+          })
+        }
+        return tmp
+      }
+      return u
+    })
   };
   const handleCollect = () => {
     let vs = [...videos];
     vs[index].collect_count += 1;
     vs[index].collected = true;
+    const vid = vs[index].id
     setVideos(vs);
+    setUser(u=>{
+      if(u){
+        const tmp:User = {
+          ...u,
+          collections:[...u.collections,{
+            video_id:vid,
+            created_at:''
+          }],
+          likes:[...u.likes]
+        }
+        return tmp
+      }
+      return u
+    })
   };
   const handleCancelCollect = () => {
     let vs = [...videos];
     vs[index].collect_count -= 1;
     vs[index].collected = false;
+    const vid = vs[index].id
     setVideos(vs);
+    setUser(u=>{
+      if(u){
+        const tmp:User = {
+          ...u,
+          collections:u.collections.filter(v=>{
+            v.video_id!=vid
+          }),
+          likes: [...u.likes]
+        }
+        return tmp
+      }
+      return u
+    })
   };
 
   return (
