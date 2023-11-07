@@ -47,7 +47,7 @@ func (s *Service) MainVideos(ctx context.Context, q types.VideoQuery, curUserID 
 		return nil, err
 	}
 	// find all users
-	var userIds []int64 // fix: use make()
+	var userIds =make([]int64,0) // fix: use make()
 	for _, v := range data {
 		userIds = append(userIds, v.UserID)
 	}
