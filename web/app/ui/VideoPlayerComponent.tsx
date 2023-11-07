@@ -30,7 +30,7 @@ const VideoPlayerComponent: React.FC<VideoPlayerProps> = ({
       if (index < videos.length - 1) {
         return n + 1;
       } else {
-        updateVideos();
+        // updateVideos();
         return 0;
       }
     });
